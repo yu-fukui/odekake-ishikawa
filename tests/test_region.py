@@ -142,6 +142,55 @@ print(json.dumps({"URL": f.リストのURL, "切り口": 名, "決まり": 決�
                 self.assertEqual(re.findall(福井の言葉, 結果["決まり"]), [], "寄付の決まりに福井の言葉が残っている")
                 self.assertIn(地["見出しの頭"], 結果["決まり"])
 
+    def test_furusato_noto_rules(self):
+        """石川：切り口は上から順、札は写さない、能登だけの日を作らない、1/1・9/21の前後は能登の切り口を使わない。"""
+        設定 = ROOT / "regions" / "ishikawa" / "region.json"
+        if not 設定.exists():
+            設定 = ROOT / "region.json"
+            if json.loads(設定.read_text(encoding="utf-8"))["県名"] != "石川":
+                self.skipTest("石川の設定が無い")
+        式 = r"""
+import json, sys
+from datetime import date
+sys.path.insert(0, "scripts")
+import ふるさと納税 as f
+def 品(i, 名, 市, 生=None):
+    return {"itemCode": str(i), "名": 名, "生の名": 生 or 名, "url": "u", "自治体": 市}
+た = [品(1, "香箱ガニ 3杯", "加賀市"), 品(2, "加能ガニ 1杯", "金沢市"), 品(3, "ズワイガニ", "七尾市"),
+      品(4, "ボイル カニ", "珠洲市"), 品(5, "いしり 2本", "能登町"), 品(6, "いしる", "輪島市"), 品(7, "魚醤", "珠洲市")]
+出 = {}
+出["香箱"] = (f.どの切り口か(た[0]) or {}).get("名")
+出["加能"] = sorted(p["itemCode"] for p in た if f.当てはまる(f.切り口たち[1], p))
+出["札"] = f.見せる名(品(9, "能登の干物", "輪島市", "【ふるさと納税】【能登半島地震復興支援】能登の干物"))
+m = f.今日のまとめ(date(2026, 10, 10), た, いくつ=3)
+出["切り口"] = sorted({(f.今日のまとめ(date(2026, 10, 10 + i), た, いくつ=3) or {"切り口": {"名": None}})["切り口"]["名"] for i in range(6)}, key=str)
+出["地区"] = [p["自治体"] for p in m["品"]]
+print(json.dumps(出, ensure_ascii=False))
+"""
+        env = {**os.environ, "REGION_FILE": str(設定)}
+        出 = subprocess.run([sys.executable, "-c", 式], cwd=ROOT, env=env, capture_output=True, text=True, check=True)
+        結果 = json.loads(出.stdout.strip().splitlines()[-1])
+        self.assertEqual(結果["香箱"], "香箱ガニ")
+        self.assertEqual(結果["加能"], ["2", "3", "4"])
+        self.assertEqual(結果["札"], "能登の干物")
+        # 能登の品しか無い「能登の海と浜のもの」は立たない
+        self.assertEqual(結果["切り口"], ["加能ガニ"])
+        self.assertIn("金沢市", 結果["地区"])
+
+    def test_furusato_avoid_days(self):
+        設定 = ROOT / "regions" / "ishikawa" / "region.json"
+        if not 設定.exists():
+            self.skipTest("福井版のリポジトリでだけ見る")
+        式 = (
+            "import sys,json; sys.path.insert(0,'scripts'); from datetime import date; import ふるさと納税 as f;"
+            "き=[c for c in f.切り口たち if c.get('避ける日')][0];"
+            "print(json.dumps([f._避ける日か(き,date(2026,12,29)),f._避ける日か(き,date(2027,1,4)),"
+            "f._避ける日か(き,date(2027,1,5)),f._避ける日か(き,date(2026,9,24)),f._避ける日か(き,date(2026,10,10))]))"
+        )
+        env = {**os.environ, "REGION_FILE": str(設定)}
+        出 = subprocess.run([sys.executable, "-c", 式], cwd=ROOT, env=env, capture_output=True, text=True, check=True)
+        self.assertEqual(json.loads(出.stdout.strip().splitlines()[-1]), [True, True, False, True, False])
+
 
 class HolidayTest(unittest.TestCase):
     def test_holiday_and_long_weekend(self):

@@ -35,6 +35,11 @@ from pathlib import Path
 )
 起点 = date(2026, 1, 1)
 県名 = "福井"
+# 下の4つは福井では使わない（region.json の「ふるさと納税」に書いた県だけ）。
+先に当たった切り口だけ = False  # 品を、最初に当たった切り口にだけ入れる（香箱ガニを加能ガニに入れない）
+名で外す語 = ""                  # 表示用の「名」にこの語がある品は紹介しない（正規表現）
+写さない札 = ""                  # 楽天の元の商品名から落とす札（正規表現。投稿・返信に写さない）
+混ぜる地区 = ""                  # この地区の品だけで並べる日を作らない（石川は「能登」）
 
 # 自治体ごとの絵文字。土地の目印にする（宿と同じ考え方）。
 自治体の絵文字 = {
@@ -94,7 +99,7 @@ def _県に合わせる() -> None:
     （compose.py が宿に戻す）。返礼品リストはその県のリポジトリの
     neta/ふるさと納税.jsonl だけを読む（furusato-collect.yml が作る）。
     """
-    global リストのURL, 切り口たち, 自治体の絵文字, 県名
+    global リストのURL, 切り口たち, 自治体の絵文字, 県名, 先に当たった切り口だけ, 名で外す語, 写さない札, 混ぜる地区
     パス = Path(os.environ.get("REGION_FILE", "").strip() or Path(__file__).resolve().parent.parent / "region.json")
     try:
         地 = json.loads(パス.read_text(encoding="utf-8"))
@@ -107,6 +112,10 @@ def _県に合わせる() -> None:
     リストのURL = 設定.get("リストのURL", "")
     切り口たち = list(設定.get("切り口たち", []))
     自治体の絵文字 = dict(設定.get("自治体の絵文字", {}))
+    先に当たった切り口だけ = bool(設定.get("先に当たった切り口だけ"))
+    名で外す語 = 設定.get("名で外す語", "")
+    写さない札 = 設定.get("写さない札", "")
+    混ぜる地区 = 設定.get("混ぜる地区", "")
 
 
 _県に合わせる()
@@ -135,15 +144,21 @@ def _行を読む() -> list[dict]:
             x = json.loads(行)
         except json.JSONDecodeError:
             continue
-        if x.get("url") and x.get("名"):
-            出.append(x)
+        if not (x.get("url") and x.get("名")):
+            continue
+        # 石川：表示用の「名」に「災害・復興・支援・応援・被災」がある品は紹介しない。
+        # 楽天の元の商品名（生の名）で判じると、「能登半島地震復興支援」の札が付いた
+        # 能登の返礼品がほぼ全部落ちる（2026-10-09 運用部・石川担当）。札は 見せる名 で落とす。
+        if 名で外す語 and re.search(名で外す語, str(x["名"])):
+            continue
+        出.append(x)
     return 出
 
 
 読む = _行を読む
 
 
-def 当てはまる(切り口: dict, 品: dict) -> bool:
+def _語で当たる(切り口: dict, 品: dict) -> bool:
     if "金額" in 切り口:
         下, 上 = 切り口["金額"]
         額 = 品.get("寄付額")
@@ -155,9 +170,35 @@ def 当てはまる(切り口: dict, 品: dict) -> bool:
 def どの切り口か(品: dict) -> dict | None:
     """その品が最初に当てはまる切り口。返信の一言に使う。"""
     for き in 切り口たち:
-        if 当てはまる(き, 品):
+        if _語で当たる(き, 品):
             return き
     return None
+
+
+def 当てはまる(切り口: dict, 品: dict) -> bool:
+    if 先に当たった切り口だけ:
+        # 切り口は上から順に当てる。香箱ガニ（雌）が「カニ」で加能ガニ（雄）の日に並ばないように
+        return どの切り口か(品) is 切り口
+    return _語で当たる(切り口, 品)
+
+
+def _地区(品: dict) -> str | None:
+    try:
+        import 地域
+    except ImportError:
+        return None
+    return 地域.地区(str(品.get("自治体") or ""))
+
+
+def _避ける日か(切り口: dict, 対象日: date) -> bool:
+    """切り口の「避ける日」（"01-01" の形）の前後「前後」日なら True。"""
+    幅 = int(切り口.get("前後", 0))
+    for md in 切り口.get("避ける日", []):
+        月, 日 = (int(v) for v in md.split("-"))
+        for 年 in (対象日.year - 1, 対象日.year, 対象日.year + 1):
+            if abs((対象日 - date(年, 月, 日)).days) <= 幅:
+                return True
+    return False
 
 
 # 一覧の1行に使える字数。件数が増えるほど短くする（本文は500字まで）。
@@ -205,9 +246,19 @@ def 見せる名(品: dict, 上限: int = 50) -> str:
     """
     s = str(品.get("生の名") or 品.get("名") or "")
     s = s.replace("【ふるさと納税】", " ")
+    if 写さない札:
+        # 「【能登半島地震復興支援】」のような札は投稿・返信に写さない（石川）。
+        # 括弧ごと落とし、それでも語が残るなら表示用の「名」を使う
+        s = re.sub(r"[【\[［（(《][^】\]］）)》]*(?:" + 写さない札 + r")[^】\]］）)》]*[】\]］）)》]", " ", s)
+        if re.search(写さない札, s):
+            s = str(品.get("名") or "")
+            if re.search(写さない札, s):
+                s = re.sub(写さない札, " ", s)
     s = re.sub(r"\[[A-Za-z0-9\-_]{3,}\]", " ", s)
     s = re.sub(r"^\s*[《＼\\][^》]{0,40}》\s*", " ", s)
     s = re.sub(r"^[\s\u3000]*[》】\]）)／/｜|]+", " ", s)
+    # 「お届け：寄附確認後、順次出荷…」のような配送の案内は名前ではないので、そこから先を落とす
+    s = re.split(r"\s(?:お届け|発送|配送)(?:時期)?[：:]", s)[0]
     # 「｜」だけでなく、区切りに使われた半角の l・I もここで切る
     s = re.split(r"[｜|]|(?<=[\s\u3000])[lI](?=[\s\u3000])", s)[0]
     i = _括弧の外の区切り(s)
@@ -260,8 +311,14 @@ def 今日のまとめ(対象日: date, 品たち: list[dict] | None = None,
     # 先に使える切り口だけを集めてから、その中で日付順に回す。
     使える = []
     for き in 切り口たち:
+        # 石川：能登の切り口は 1/1・9/21 の前後3日は使わない（運用部・石川担当の決まり）
+        if _避ける日か(き, 対象日):
+            continue
         合う = [p for p in sorted(品たち, key=lambda x: str(x.get("itemCode")))
                 if 当てはまる(き, p)]
+        # 石川：能登の品だけを並べる日を作らない。ほかの地区の品が無い切り口は立てない
+        if 混ぜる地区 and all(_地区(p) == 混ぜる地区 for p in 合う):
+            continue
         if len(合う) >= 最低:
             使える.append((き, 合う))
     if not 使える:
@@ -285,6 +342,9 @@ def 今日のまとめ(対象日: date, 品たち: list[dict] | None = None,
                 break
             if p not in 選ぶ:
                 選ぶ.append(p)
+        if 混ぜる地区 and all(_地区(p) == 混ぜる地区 for p in 選ぶ):
+            ほか = next(p for p in 並べ直し if _地区(p) != 混ぜる地区)
+            選ぶ[-1] = ほか
         return {"切り口": き, "品": 選ぶ}
     return None
 
