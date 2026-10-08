@@ -519,7 +519,12 @@
           "こうばこ"
         ],
         "フック": "石川県ではズワイガニの雌を香箱ガニと呼び、漁期は2か月に満たない短さです。",
-        "出典": "http://www.ikgyoren.jf-net.ne.jp/fish/kbkgani.html"
+        "出典": "http://www.ikgyoren.jf-net.ne.jp/fish/kbkgani.html",
+        "除く語": [
+          "紅ズワイ",
+          "紅ずわい",
+          "ベニズワイ"
+        ]
       },
       {
         "名": "加能ガニ",
@@ -534,7 +539,18 @@
           "蟹"
         ],
         "フック": "加能ガニは、石川県で揚がった雄のズワイガニで、良品には水色のタグが付きます。",
-        "出典": "http://www.ikgyoren.jf-net.ne.jp/fish/kngani.html"
+        "出典": "http://www.ikgyoren.jf-net.ne.jp/fish/kngani.html",
+        "除く語": [
+          "紅ズワイ",
+          "紅ずわい",
+          "ベニズワイ",
+          "かにめし",
+          "カニめし",
+          "蟹めし",
+          "かに飯",
+          "カニ飯",
+          "蟹飯"
+        ]
       },
       {
         "名": "能登牛",

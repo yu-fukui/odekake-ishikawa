@@ -164,6 +164,9 @@ def _語で当たる(切り口: dict, 品: dict) -> bool:
         額 = 品.get("寄付額")
         return bool(額) and 下 <= int(額) < 上
     名 = str(品.get("名") or "")
+    # 「除く語」がある品はこの切り口に入れない（石川：紅ズワイガニ・かにめしを加能ガニに入れない）
+    if any(w in 名 for w in 切り口.get("除く語", [])):
+        return False
     return any(w in 名 for w in 切り口["探す語"])
 
 

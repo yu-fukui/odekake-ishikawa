@@ -274,7 +274,8 @@ const 切り口で入れた = new Set();
   if (切り口たち.length && 何件 > 0) {
     const 最初の切り口 = (x) => {
       const 名 = 名前を整える(x.itemName);
-      return 切り口たち.find((c) => (c['探す語'] ?? []).some((w) => 名.includes(w)))?.['名'];
+      return 切り口たち.find((c) => !(c['除く語'] ?? []).some((w) => 名.includes(w))
+        && (c['探す語'] ?? []).some((w) => 名.includes(w)))?.['名'];
     };
     const 数 = {};
     for (const x of [...集まり.values()].filter((v) => !v.手で選んだ).sort((a, b) => 鉄板の点(b) - 鉄板の点(a))) {
@@ -376,9 +377,11 @@ if (existsSync(置き場)) {
 // 別の県では「県の一覧」「切り口の検索」が設定にあれば、ここで作る。
 // 形は商品検索APIが返す affiliateUrl と同じ（hb.afl.rakuten.co.jp/hgc/<ID>/?pc=…&m=…）。
 // 手で入れた短縮URL（a.r10.to）の行は書きかえない。
+// 返信は500字まで（URLも字数に入る）。検索ページのURLは日本語が %E3… になって長いので、
+// 二重に符号化しない（一度ほどいてから pc= に入れる）。スマホ用の m= も付けない（pc= だけで飛ぶ）。
 function アフィのリンク(元URL) {
-  const u = encodeURIComponent(元URL);
-  return `https://hb.afl.rakuten.co.jp/hgc/${アフィリエイトID}/?pc=${u}&m=${u}`;
+  const u = encodeURIComponent(decodeURI(元URL));
+  return `https://hb.afl.rakuten.co.jp/hgc/${アフィリエイトID}/?pc=${u}`;
 }
 function 手の行(パス) {
   if (!existsSync(パス)) return [];
