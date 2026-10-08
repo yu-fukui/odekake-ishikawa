@@ -138,20 +138,23 @@ const 手動 = existsSync(手動の置き場)
   : [];
 
 const 集まり = new Map();
+// 落とした理由を数える（切り口の語で探して1件も残らないとき、どこで落ちたかを見るため）
+let 落ち = {};
+const 落とす = (理由) => { 落ち[理由] = (落ち[理由] ?? 0) + 1; return false; };
 function 入れる(x, k, 経路) {
   const 名 = x.itemName ?? '', 店 = x.shopName ?? '';
   // 「大野市」は大分県の豊後大野市にも含まれる（2026-09-25、椎茸が3件まぎれた）。
   // 自治体名だけで判じると他県が入るので、まず福井のものかを見る。
   // 楽天ふるさと納税の店名は「福井県○○市」の形になっている。
   // 石川は「福島県石川町」があるので、県の字（「石川県」）まで見る。
-  if (!店.includes(県) && !名.includes(県) && !(県 === '福井県' && /福井/.test(店))) return false;
+  if (!店.includes(県) && !名.includes(県) && !(県 === '福井県' && /福井/.test(店))) return 落とす('ほかの県');
   const 自治体 = 市町.find((m) => 店.includes(m)) ?? 市町.find((m) => 名.includes(m));
-  if (!自治体) return false;
-  if (!/ふるさと納税/.test(名)) return false;
-  if (除く && 除く.test(名)) { 除いた += 1; return false; }
-  if ((x.reviewCount ?? 0) < 最低レビュー数) return false;
+  if (!自治体) return 落とす('市町が無い');
+  if (!/ふるさと納税/.test(名)) return 落とす('ふるさと納税でない');
+  if (除く && 除く.test(名)) { 除いた += 1; return 落とす('返礼品なし'); }
+  if ((x.reviewCount ?? 0) < 最低レビュー数) return 落とす(`レビュー${最低レビュー数}件未満`);
   const 前 = 集まり.get(x.itemCode);
-  if (前) { if (経路 === '料率順') 前.経路 = '料率順'; return false; }
+  if (前) { if (経路 === '料率順') 前.経路 = '料率順'; return 落とす('もう入っている'); }
   const 上がる = 料率アップの自治体[自治体];
   集まり.set(x.itemCode, {
     ...x, 自治体, キーワード: k, 経路,
@@ -178,8 +181,10 @@ for (const k of キーワード) {
     try {
       const items = await 探す(k, 料率順);
       let 通した = 0;
+      落ち = {};
       for (const x of items) if (入れる(x, k, 料率順 ? '料率順' : 'レビュー順')) 通した += 1;
-      if (items.length) console.log(`「${k}」${料率順 ? `（料率${最低料率}%以上）` : '（レビュー順）'}… ${items.length}件中 ${通した}件が${県}`);
+      const 理由 = Object.entries(落ち).map(([r, n]) => `${r}${n}`).join('・');
+      if (items.length) console.log(`「${k}」${料率順 ? `（料率${最低料率}%以上）` : '（レビュー順）'}… ${items.length}件中 ${通した}件が${県}${理由 ? `（落とした: ${理由}）` : ''}`);
     } catch (e) { console.log(`::warning::「${k}」で取れませんでした: ${String(e.message ?? e).slice(0, 160)}`); }
     await 眠る(1100);
   }
@@ -254,6 +259,32 @@ if (アップ勢.length) {
 
 const 選ぶ = [...手で, ...アップ採用];
 const 入った = new Set(選ぶ.map((x) => x.itemCode));
+const 切り口で入れた = new Set();
+
+// 投稿の切り口（region.json の「ふるさと納税」→「切り口たち」）ごとに、まず何件か入れる。
+// 切り口は3件そろって立つので、自治体ごとの上限や点の順で切り口の品が落ちると、
+// 1つの切り口しか立たない（2026-10-09 石川、能登牛しか立たなかった）。
+// 当てるのは投稿と同じ、整えた名前（名）。上から順に当て、先に当たった切り口に数える。
+{
+  let 切り口たち = [];
+  try {
+    切り口たち = JSON.parse(readFileSync('region.json', 'utf8'))?.['ふるさと納税']?.['切り口たち'] ?? [];
+  } catch { /* 福井版など region.json に切り口が無いリポジトリ */ }
+  const 何件 = 決め['切り口ごとにまず何件'] ?? 5;
+  if (切り口たち.length && 何件 > 0) {
+    const 最初の切り口 = (x) => {
+      const 名 = 名前を整える(x.itemName);
+      return 切り口たち.find((c) => (c['探す語'] ?? []).some((w) => 名.includes(w)))?.['名'];
+    };
+    const 数 = {};
+    for (const x of [...集まり.values()].filter((v) => !v.手で選んだ).sort((a, b) => 鉄板の点(b) - 鉄板の点(a))) {
+      const 名 = 最初の切り口(x);
+      if (!名 || 入った.has(x.itemCode) || (数[名] ?? 0) >= 何件) continue;
+      選ぶ.push(x); 入った.add(x.itemCode); 数[名] = (数[名] ?? 0) + 1; 切り口で入れた.add(x.itemCode);
+    }
+    見せる(`切り口ごとに先に入れた: ${切り口たち.map((c) => `${c['名']}${数[c['名']] ?? 0}`).join('・')}`);
+  }
+}
 
 // まず、集めた言葉ごとに1件ずつ入れる。
 // 投稿の切り口（越前がに／職人のもの／若狭牛…）は品の名前で振り分けるので、
@@ -306,7 +337,8 @@ function 名前を整える(生) {
 }
 
 const きょう = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
-const 出 = 選ぶ.sort((a, b) => 鉄板の点(b) - 鉄板の点(a)).slice(0, 上限).map((x) => ({
+// 上限で切るとき、切り口のために入れた品は残す
+const 出 = 選ぶ.sort((a, b) => (切り口で入れた.has(b.itemCode) - 切り口で入れた.has(a.itemCode)) || (鉄板の点(b) - 鉄板の点(a))).slice(0, 上限).map((x) => ({
   itemCode: x.itemCode, 名: 名前を整える(x.itemName), 生の名: String(x.itemName ?? ''),
   url: x.affiliateUrl,
   自治体: x.自治体, 寄付額: x.itemPrice, 料率: x.料率, 料率アップ: x.料率アップ === true,
