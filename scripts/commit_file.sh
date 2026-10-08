@@ -15,15 +15,17 @@ if [ "${DRY_RUN:-false}" = "true" ]; then
   exit 0
 fi
 
-if git diff --quiet -- "${TARGET}"; then
+# まだ git に入っていない新しいファイルも拾うため、add してから index で比べる
+# （2026-10-08 石川版で、初めての投稿の state/posted.json が「変更なし」と見なされ、記録が残らなかった）
+git add -- "${TARGET}" 2>/dev/null || true
+if git diff --cached --quiet -- "${TARGET}"; then
   echo "${TARGET} に変更なし。コミットはしません。"
   exit 0
 fi
 
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-git add "${TARGET}"
-git commit -m "${MESSAGE}"
+git commit -m "${MESSAGE}" -- "${TARGET}"
 
 # 画面や他のワークフローからの編集と衝突しうるので、rebase してから push する。
 # 同じ実行で作った別のファイル（まだコミットしていないもの）があっても止まらないよう --autostash を付ける
