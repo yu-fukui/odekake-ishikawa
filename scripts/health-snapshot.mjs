@@ -162,6 +162,7 @@ if (SKIP_API) {
     const 毎日 = { "neta-collect.yml": "朝の情報集め", "threads-compose.yml": "翌日ぶんの作成" };
     const 警告 = [];
     for (const w of snapshot.ワークフロー) {
+      if (毎日[w.ファイル] && w.今日走ったか === true && w.判定 === "失敗") 警告.push(`${毎日[w.ファイル]}（${w.ファイル}）が今日失敗しています。${w.最後の失敗?.理由 ? "理由：" + JSON.stringify(w.最後の失敗.理由).slice(0, 200) : "Actions のログを確かめてください"}`);
       if (毎日[w.ファイル] && w.今日走ったか !== true) 警告.push(`${毎日[w.ファイル]}（${w.ファイル}）が今日まだ走っていません。cron-job.org の起動を確かめてください`);
       if (w.ファイル === "threads-post.yml" && (w["24時間の実行"] ?? 0) === 0) 警告.push("予約投稿（threads-post.yml）が24時間走っていません。cron-job.org の起動を確かめてください");
     }

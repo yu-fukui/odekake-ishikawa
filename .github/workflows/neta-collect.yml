@@ -69,7 +69,10 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
           CRAWL_ONLY: ${{ (inputs.crawl_only || github.event.client_payload.crawl_only) && '1' || '' }}
-        run: node scripts/neta-collect.mjs | tee -a "$GITHUB_STEP_SUMMARY"
+        # tee に通すと、スクリプトが落ちても（残高不足の 400 など）成功扱いになっていた。pipefail で失敗を伝える
+        run: |
+          set -o pipefail
+          node scripts/neta-collect.mjs | tee -a "$GITHUB_STEP_SUMMARY"
 
       # 追記が0件でも、「調べてほしいもの」欄から解決ぶんを消しただけの変更がありうる。
       # 変更の有無はステップの中で git diff で見ているので、ここでは絞らない。
