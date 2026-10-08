@@ -1,0 +1,34 @@
+{
+  "説明": "いしかわおでかけ（石川県版）の巡回先の下書き。新しいリポジトリを作るときに neta/巡回先.json として持っていく。2026-10-08 調査で、RSS は中身（件数・新しい日付）を、HTML は催しのリンクが並ぶことを確かめた。福井版の仕組みはまだこのファイルを読まない。",
+  "何日前まで": 10,
+  "1つの巡回先から渡す最大件数": 6,
+  "RSS": [
+    { "名前": "石川県（新着）", "区分": "県", "url": "https://www.pref.ishikawa.lg.jp/shinchaku/shinchaku.xml" },
+    { "名前": "小松市（新着）", "区分": "市町", "url": "https://www.city.komatsu.lg.jp/cgi-bin/feed.php?siteNew=1&displayRange=90" },
+    { "名前": "能美市（お知らせ）", "区分": "市町", "url": "https://www.city.nomi.ishikawa.jp/news/rss.xml" },
+    { "名前": "能美市（トピックス）", "区分": "市町", "url": "https://www.city.nomi.ishikawa.jp/topics/rss.xml" },
+    { "名前": "野々市市（新着）", "区分": "市町", "url": "https://www.city.nonoichi.lg.jp/rss/10/list1.xml" },
+    { "名前": "かほく市（イベント）", "区分": "市町", "url": "https://www.city.kahoku.lg.jp/event.xml" },
+    { "名前": "かほく市（お知らせ）", "区分": "市町", "url": "https://www.city.kahoku.lg.jp/news.xml" },
+    { "名前": "輪島市（新着）", "区分": "能登", "url": "https://www.city.wajima.ishikawa.jp/article/index.rss" },
+    { "名前": "珠洲市（新着）", "区分": "能登", "url": "https://www.city.suzu.lg.jp/rss/10/list1.xml" },
+    { "名前": "能登町（新着）", "区分": "能登", "url": "https://www.town.noto.lg.jp/cgi-bin/feed.php?siteNew=1&displayCount=15" }
+  ],
+  "HTML": [
+    { "名前": "ほっと石川旅ねっと イベント", "区分": "ポータル", "url": "https://www.hot-ishikawa.jp/event/index.html", "リンクの形": "^https://www\\.hot-ishikawa\\.jp/event/detail_\\d+\\.html$", "最大件数": 40 },
+    { "名前": "金沢旅物語 イベント", "区分": "ポータル", "url": "https://www.kanazawa-kankoukyoukai.or.jp/event/index.html", "リンクの形": "^https://www\\.kanazawa-kankoukyoukai\\.or\\.jp/event/detail_\\d+\\.html$", "最大件数": 40 },
+    { "名前": "金沢市 イベント", "区分": "市町", "url": "https://www4.city.kanazawa.lg.jp/event.html", "リンクの形": "^https?://www4\\.city\\.kanazawa\\.lg\\.jp/event/\\d+\\.html$", "最大件数": 30 }
+  ],
+  "RSSが無いので検索で補うもの": [
+    "加賀市（お知らせ一覧）https://www.city.kaga.ishikawa.jp/news_list.html ※ 一覧のリンクが JavaScript で出るので、今の拾い方では読めない",
+    "七尾市 観光イベント https://www.city.nanao.lg.jp/kanko/event/index.html と ななおイベント https://nanao-event.com/",
+    "羽咋市 https://www.city.hakui.lg.jp/ ※ トップにお知らせのリンクが見つからない。要調べ"
+  ],
+  "まだ調べること": [
+    "新店の情報源（福井の URALA・ふーぽ にあたる石川の地元メディア）",
+    "白山市（RSS の一覧ページ https://www.city.hakusan.lg.jp/about/site/rss.html から選ぶ）、羽咋市、残りの町",
+    "能登の扱い：輪島・珠洲・能登町の新着には、復旧や支援のお知らせが多い。言葉づかいの決まりは運用部・石川担当が作る（連絡/ に置く予定）"
+  ],
+  "見出しに入っていたら捨てる": ["入札", "公告", "災害", "被災", "罹災", "義援金", "仮設", "避難"],
+  "_注": "能登の市町の新着は、被災や支援の行政のお知らせが多いので、捨てる語を福井より増やした。営業再開や催しの再開は、事実として拾う。"
+}

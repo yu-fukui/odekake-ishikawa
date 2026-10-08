@@ -1,0 +1,903 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>いしかわおでかけ｜石川の今週末のイベント・新しいお店まとめ</title>
+<meta name="description" content="石川県内の今週末のイベント、開催中の展示やフェア、新しくオープンしたお店を毎朝まとめて更新。市町・日付で探せます。主催者や自治体などの出典つき。">
+<link rel="canonical" href="https://yu-fukui.github.io/odekake-ishikawa/">
+<meta name="theme-color" content="#1f7a57">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:title" content="いしかわおでかけ">
+<meta property="og:description" content="石川のイベント・新スポットを毎朝まとめて更新。Threads @ishikawa._ishikawa のおでかけ情報サイト">
+<meta property="og:image" content="https://yu-fukui.github.io/odekake-ishikawa/icon-192.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yu-fukui.github.io/odekake-ishikawa/">
+<meta property="og:site_name" content="いしかわおでかけ">
+<meta property="og:locale" content="ja_JP">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://yu-fukui.github.io/odekake-ishikawa/#site","name":"いしかわおでかけ","url":"https://yu-fukui.github.io/odekake-ishikawa/","inLanguage":"ja","description":"石川県内の今週末のイベントと新しいお店のまとめ","publisher":{"@id":"https://yu-fukui.github.io/odekake-ishikawa/#org"}},{"@type":"Organization","@id":"https://yu-fukui.github.io/odekake-ishikawa/#org","name":"ふくふくプロジェクト","url":"https://yu-fukui.github.io/odekake-ishikawa/about/","logo":"https://yu-fukui.github.io/odekake-ishikawa/icon-192.png","sameAs":["https://www.threads.com/@ishikawa._ishikawa","https://ekimae.fukui-fukui.com/"]}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f1e8; --surface: #ffffff; --ink: #22302a; --muted: #6d7570; --line: #e4ddcf;
+  --main: #1f7a57; --main-deep: #155b40; --main-soft: #e2f1e8; --accent: #ef7f3a; --accent-soft: #fdeadb;
+  --sat: #2f6fd0; --sun: #d9473a;
+  --event: #1f7a57; --spot: #e0692c; --topic: #8a7d6b;
+  --shadow: 0 1px 2px rgba(40, 50, 40, .06), 0 6px 18px rgba(40, 50, 40, .08);
+  --tabbar: 64px; --hd: #1f7a57; --hd-deep: #155b40;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141815; --surface: #1d231f; --ink: #e8eee9; --muted: #a2aba5; --line: #2e3631;
+    --main: #4cc292; --main-deep: #3aa679; --main-soft: #1b3428; --accent: #ff9a59; --accent-soft: #3d2618;
+    --sat: #7aa8f0; --sun: #f08174;
+    --event: #4cc292; --spot: #ff9a59; --topic: #b9ad9a;
+    --shadow: 0 6px 18px rgba(0, 0, 0, .35);
+    --hd: #17513b; --hd-deep: #0f3a2a;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); line-height: 1.65;
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Hiragino Sans", system-ui, sans-serif; font-weight: 500;
+  padding-bottom: calc(var(--tabbar) + env(safe-area-inset-bottom)); }
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+svg.i { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* ── ヘッダー ── */
+.hd { position: sticky; top: 0; z-index: 20; background: var(--hd); color: #fff; }
+.hd-in { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 10px; padding: 10px 16px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-right: auto; min-width: 0; }
+.emblem { width: 40px; height: 40px; border-radius: 50%; background: #fff; color: var(--hd); display: grid; place-items: center; flex: none; position: relative; }
+.emblem { overflow: hidden; box-shadow: 0 0 0 2px #fff; }
+.emblem img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.logo-t b { display: block; font-weight: 800; font-size: 1.12rem; letter-spacing: .06em; line-height: 1.2; white-space: nowrap; }
+.logo-t small { display: block; font-size: .62rem; letter-spacing: .22em; opacity: .8; line-height: 1.3; }
+.hd-btn { position: relative; height: 40px; min-width: 40px; padding: 0 12px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,.45); background: rgba(255,255,255,.08); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; font-size: .82rem; font-weight: 700; transition: background .15s; }
+.hd-btn:hover { background: rgba(255,255,255,.18); }
+.hd-btn[aria-expanded="true"] { background: #fff; color: var(--hd-deep); border-color: #fff; }
+.hd-btn svg { width: 20px; height: 20px; }
+.hd-btn .t { display: none; }
+.hd-btn .cnt { position: absolute; top: -5px; right: -5px; min-width: 19px; height: 19px; border-radius: 10px; padding: 0 5px; background: var(--accent); color: #fff; font-size: .68rem; display: grid; place-items: center; border: 2px solid var(--hd); }
+.hd-btn .cnt[hidden] { display: none; }
+.hd-search { display: none; }
+.hd-nav { display: none; }
+
+/* PC はヘッダーにメニューと検索欄を並べる */
+@media (min-width: 900px) {
+  body { padding-bottom: 0; }
+  .hd-in { gap: 14px; padding: 12px 24px; }
+  .logo { margin-right: 8px; flex: none; }
+  /* メニューは残りの幅に収める。入りきらないときは JS が compact を付けてアイコンだけにする */
+  .hd-nav { display: flex; gap: 4px; margin-right: auto; flex: 1 1 auto; min-width: 0; overflow: hidden; }
+  .hd-nav button { white-space: nowrap; flex: none; border: 0; background: none; color: rgba(255,255,255,.85); padding: 8px 14px; border-radius: 999px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: .88rem; font-weight: 700; }
+  .hd-nav button:hover { background: rgba(255,255,255,.12); color: #fff; }
+  .hd-nav button[aria-pressed="true"] { background: #fff; color: var(--hd-deep); }
+  .hd-nav svg { width: 18px; height: 18px; }
+  .hd-search { display: flex; align-items: center; gap: 6px; flex: 0 1 220px; min-width: 150px; background: rgba(255,255,255,.14); border-radius: 999px; padding: 0 6px 0 14px; border: 1.5px solid transparent; transition: background .15s; }
+  .hd-search:focus-within { background: #fff; color: var(--ink); }
+  .hd-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: inherit; font: inherit; font-size: .9rem; padding: 9px 0; }
+  .hd-search input::placeholder { color: rgba(255,255,255,.75); }
+  .hd-search:focus-within input::placeholder { color: var(--muted); }
+  .hd-search svg { width: 18px; height: 18px; opacity: .85; }
+  #btn-search { display: none; }
+  .hd-btn .t { display: inline; white-space: nowrap; }
+  .tabbar { display: none !important; }
+}
+.hd-nav.compact button > span:not(.dot) { display: none; }
+.hd-nav.compact button { padding: 9px 11px; }
+
+/* スマホの下のタブバー */
+.tabbar { position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: repeat(6, 1fr); padding: 6px 2px calc(6px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,.05); }
+.tabbar button { border: 0; background: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: .66rem; font-weight: 700; color: var(--muted); padding: 2px 0; position: relative; }
+.tabbar .ic { width: 46px; height: 30px; border-radius: 15px; display: grid; place-items: center; transition: background .15s; }
+.tabbar button[aria-pressed="true"] { color: var(--main); }
+.tabbar button[aria-pressed="true"] .ic { background: var(--main-soft); }
+.tabbar .dot, .hd-nav .dot { position: absolute; top: 2px; left: calc(50% + 10px); width: 8px; height: 8px; border-radius: 50%; background: var(--accent); border: 2px solid var(--surface); }
+.hd-nav button { position: relative; }
+.hd-nav .dot { top: 4px; left: auto; right: 6px; border-color: var(--hd); }
+
+/* ── 検索・絞り込みのパネル ── */
+.scrim { position: fixed; inset: 0; z-index: 30; background: rgba(15, 25, 20, .4); opacity: 0; pointer-events: none; transition: opacity .2s; }
+.scrim.open { opacity: 1; pointer-events: auto; }
+.panel { position: fixed; z-index: 31; left: 0; right: 0; background: var(--surface); padding: 18px 18px 20px; transition: transform .25s cubic-bezier(.2,.8,.2,1), opacity .2s; }
+.panel.from-top { top: 0; transform: translateY(-105%); border-radius: 0 0 22px 22px; }
+.panel.from-bottom { bottom: 0; transform: translateY(105%); border-radius: 22px 22px 0 0; max-height: 84vh; overflow: auto; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+.panel.open { transform: none; }
+@media (min-width: 900px) {
+  .panel.from-bottom { left: auto; right: 24px; top: 74px; bottom: auto; width: 400px; border-radius: 20px; transform: translateY(-10px); opacity: 0; pointer-events: none; box-shadow: 0 16px 40px rgba(0,0,0,.18); }
+  .panel.from-bottom.open { transform: none; opacity: 1; pointer-events: auto; }
+  @media (min-width: 1328px) { .panel.from-bottom { right: calc((100vw - 1280px) / 2 + 24px); } }
+}
+.p-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.p-head h2 { margin: 0; font-size: 1.05rem; font-weight: 800; flex: 1; display: flex; align-items: center; gap: 8px; }
+.p-head h2 svg { color: var(--main); }
+.p-head .x { border: 0; background: var(--bg); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; }
+.p-head .x svg { width: 18px; height: 18px; }
+.p-label { font-size: .75rem; color: var(--muted); font-weight: 700; margin: 16px 0 8px; letter-spacing: .08em; }
+.field { display: flex; align-items: center; gap: 8px; border: 2px solid var(--main); border-radius: 14px; padding: 2px 6px 2px 12px; }
+.field svg { color: var(--main); }
+.field input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--ink); font: inherit; font-size: 16px; padding: 9px 0; }
+.field input::-webkit-search-cancel-button, .hd-search input::-webkit-search-cancel-button { -webkit-appearance: none; display: none; }
+.field .clear { border: 0; background: var(--bg); width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; }
+.field .clear svg { width: 14px; height: 14px; color: var(--muted); }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 5px 14px; font-size: .86rem; font-weight: 700; cursor: pointer; transition: border-color .12s, background .12s; }
+.pill:hover { border-color: var(--main); }
+.pill[aria-pressed="true"] { background: var(--main); border-color: var(--main); color: #fff; }
+.seg { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--bg); border-radius: 12px; padding: 4px; gap: 4px; }
+.seg button { border: 0; background: none; border-radius: 9px; padding: 8px 4px; font-size: .86rem; font-weight: 700; cursor: pointer; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--main-deep); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+.p-foot { display: flex; gap: 10px; margin-top: 22px; }
+.p-foot button { flex: 1; padding: 12px; border-radius: 14px; font-weight: 800; cursor: pointer; border: 1.5px solid var(--line); background: var(--surface); }
+.p-foot .ok { background: var(--main); border-color: var(--main); color: #fff; }
+
+/* ── 本文 ── */
+main { max-width: 1280px; margin: 0 auto; padding: 18px 16px 40px; }
+@media (min-width: 900px) { main { padding: 26px 24px 64px; } }
+.today { font-size: .8rem; color: var(--muted); font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.today b { color: var(--accent); }
+.ttl { display: flex; align-items: center; gap: 12px; margin: 6px 0 4px; }
+.ttl .ic { width: 44px; height: 44px; border-radius: 14px; background: var(--main); color: #fff; display: grid; place-items: center; flex: none; transform: rotate(-4deg); }
+.ttl h1 { margin: 0; font-size: clamp(1.05rem, 4.3vw, 1.7rem); font-weight: 800; line-height: 1.3; }
+.ttl .n { margin-left: auto; font-size: .82rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.ttl .n b { font-size: 1.3rem; color: var(--main); margin-right: 2px; }
+.route { height: 10px; margin: 8px 0 4px; background: radial-gradient(circle, var(--main) 2px, transparent 2.5px) 0 50% / 12px 10px repeat-x; opacity: .35; }
+
+/* 日付のストリップ */
+.days { display: flex; gap: 8px; overflow-x: auto; padding: 10px 2px 12px; margin: 4px -16px 0; padding-left: 16px; padding-right: 16px; scrollbar-width: none; scroll-snap-type: x proximity; }
+.days::-webkit-scrollbar { display: none; }
+.day { flex: none; width: 54px; border: 1.5px solid var(--line); background: var(--surface); border-radius: 16px; padding: 6px 0 7px; display: flex; flex-direction: column; align-items: center; gap: 0; cursor: pointer; scroll-snap-align: start; transition: transform .12s, border-color .12s; }
+.day:hover { transform: translateY(-2px); border-color: var(--main); }
+.day .w { font-size: .68rem; font-weight: 700; color: var(--muted); }
+.day .d { font-size: 1.2rem; font-weight: 800; line-height: 1.25; }
+.day .c { font-size: .64rem; font-weight: 700; color: var(--main); min-height: 1em; }
+.day.sat .w, .day.sat .d { color: var(--sat); }
+.day.sun .w, .day.sun .d { color: var(--sun); }
+.day.today-d { border-color: var(--main); }
+.day.zero { opacity: .5; }
+.day[aria-pressed="true"] { background: var(--main); border-color: var(--main); }
+.day[aria-pressed="true"] .w, .day[aria-pressed="true"] .d, .day[aria-pressed="true"] .c { color: #fff; }
+@media (min-width: 900px) { .days { margin: 4px 0 0; padding-left: 2px; padding-right: 2px; } }
+
+.active { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 6px; }
+.active button { display: inline-flex; align-items: center; gap: 4px; border: 0; background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 4px 8px 4px 12px; font-size: .78rem; font-weight: 700; cursor: pointer; }
+.active svg { width: 14px; height: 14px; }
+.group { margin: 26px 0 12px; font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+.group::after { content: ""; flex: 1; height: 0; border-top: 2px dashed var(--line); }
+.group svg { color: var(--main); }
+
+/* チケット型のカード：上がこちらの紹介、切り取り線の下（半券）が出典のリンクカード */
+.grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); align-items: start; }
+.ticket { --notch: 12px; position: relative; background: var(--surface); border-radius: 18px; box-shadow: var(--shadow); transition: transform .15s; display: flex; flex-direction: column; overflow: hidden; }
+.ticket:hover { transform: translateY(-2px); }
+.ticket::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--kc); }
+.ticket.催し { --kc: var(--event); } .ticket.スポット { --kc: var(--spot); } .ticket.話題 { --kc: var(--topic); }
+.t-main { display: grid; grid-template-columns: 64px 1fr; gap: 4px 14px; padding: 16px 16px 14px 20px; }
+/* 日付のスタンプ */
+.stamp { width: 62px; height: 62px; border-radius: 50%; border: 2.5px solid var(--accent); color: var(--accent); align-self: start;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; transform: rotate(-8deg); }
+.stamp .m { font-size: .62rem; font-weight: 800; }
+.stamp .dd { font-size: 1.15rem; font-weight: 800; }
+.stamp .wd { font-size: .58rem; font-weight: 700; }
+.stamp.spot { border-color: var(--spot); color: var(--spot); }
+.stamp.spot .dd { font-size: .78rem; letter-spacing: .04em; }
+.stamp.icon { border-style: dashed; border-color: var(--kc); color: var(--kc); }
+.stamp.icon svg { width: 26px; height: 26px; }
+.t-text { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.t-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: .7rem; font-weight: 800; }
+.t-tags .kind { color: var(--kc); display: inline-flex; align-items: center; gap: 4px; }
+.t-tags .kind i { width: 8px; height: 8px; border-radius: 50%; background: var(--kc); }
+.t-tags .new { background: var(--accent); color: #fff; border-radius: 5px; padding: 0 6px; letter-spacing: .08em; }
+.t-tags .soon { background: var(--accent-soft); color: var(--accent); border-radius: 5px; padding: 0 6px; }
+.ticket.done { opacity: .72; }
+/* 泊まる */
+.pr-note { display: flex; gap: 8px; align-items: flex-start; font-size: .76rem; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; margin: 10px 0 4px; }
+.pr-note b { flex: none; background: var(--muted); color: var(--surface); border-radius: 4px; padding: 0 6px; font-size: .68rem; margin-top: 2px; }
+.feats { display: flex; gap: 8px; overflow-x: auto; padding: 10px 2px 6px; scrollbar-width: none; }
+.feats::-webkit-scrollbar { display: none; }
+.feats .pill { flex: none; }
+.hotel { background: var(--surface); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
+.h-img { position: relative; aspect-ratio: 16 / 9; background: var(--main-soft); overflow: hidden; }
+.h-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.h-img .pr { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,.6); color: #fff; font-size: .66rem; font-weight: 800; border-radius: 4px; padding: 1px 6px; letter-spacing: .06em; }
+.h-img .rate { position: absolute; right: 10px; bottom: 10px; background: rgba(255,255,255,.95); color: #22302a; border-radius: 999px; padding: 2px 10px 2px 6px; font-size: .78rem; font-weight: 800; display: inline-flex; align-items: center; gap: 3px; }
+.h-img .rate svg { width: 15px; height: 15px; color: #f2a516; }
+.h-img .rate small { font-weight: 700; color: #6d7570; }
+.h-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
+.h-name { margin: 0; font-size: 1rem; font-weight: 800; line-height: 1.45; }
+.h-text { margin: 0; font-size: .82rem; color: var(--muted); }
+.h-feats { display: flex; flex-wrap: wrap; gap: 5px; }
+.h-feats span { font-size: .7rem; font-weight: 800; color: var(--main-deep); background: var(--main-soft); border-radius: 6px; padding: 1px 7px; }
+.h-foot { margin-top: auto; padding-top: 6px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.h-price { font-size: .72rem; color: var(--muted); font-weight: 700; line-height: 1.3; }
+.h-price b { display: block; font-size: 1.05rem; color: var(--accent); }
+.h-go { flex: none; display: inline-flex; align-items: center; gap: 5px; text-decoration: none; background: #bf0000; color: #fff; border-radius: 999px; padding: 8px 14px; font-size: .8rem; font-weight: 800; }
+.h-go:hover { filter: brightness(1.08); }
+.h-go svg { width: 14px; height: 14px; }
+@media (prefers-color-scheme: dark) { .h-feats span { color: var(--main); } }
+.ended-toggle { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; max-width: 420px; margin: 28px auto 0; padding: 12px 18px; border-radius: 14px;
+  border: 1.5px dashed var(--line); background: var(--surface); color: var(--muted); font-weight: 800; font-size: .9rem; cursor: pointer; }
+.ended-toggle:hover { border-color: var(--main); color: var(--main); }
+.ended-toggle svg { width: 18px; height: 18px; }
+.ticket.done .stamp { border-color: var(--muted); color: var(--muted); }
+.t-tags .soon.done { background: var(--line); color: var(--muted); }
+.t-when { font-size: .8rem; font-weight: 800; color: var(--accent); }
+.t-title { margin: 0; font-size: 1.02rem; font-weight: 800; line-height: 1.45; }
+.t-note { margin: 0; font-size: .84rem; color: var(--muted); }
+.t-area { align-self: flex-start; display: inline-flex; align-items: center; gap: 3px; background: var(--main-soft); color: var(--main-deep); border-radius: 999px; padding: 1px 10px 1px 6px; font-size: .74rem; font-weight: 700; margin-top: 2px; }
+.t-area svg { width: 14px; height: 14px; }
+/* 切り取り線と左右の切り欠き */
+.perf { position: relative; height: 0; border-top: 2px dashed var(--line); margin: 0 16px; }
+.perf::before, .perf::after { content: ""; position: absolute; top: calc(var(--notch) * -1 - 1px); width: calc(var(--notch) * 2); height: calc(var(--notch) * 2); border-radius: 50%; background: var(--bg); }
+.perf::before { left: calc(-16px - var(--notch)); } .perf::after { right: calc(-16px - var(--notch)); }
+/* 半券：出典のリンクカード */
+.stub { padding: 12px 14px 14px 20px; }
+.stub-label { font-size: .64rem; font-weight: 800; color: var(--muted); letter-spacing: .12em; margin-bottom: 6px; }
+.lc { display: flex; text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg); transition: border-color .15s; min-height: 64px; }
+.lc:hover { border-color: var(--main); }
+.lc-img { flex: none; width: 112px; align-self: stretch; min-height: 64px; background: var(--line); position: relative; }
+.lc-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.lc-txt { min-width: 0; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; justify-content: center; }
+.lc-site { display: flex; align-items: center; gap: 4px; font-size: .66rem; color: var(--muted); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lc-site svg { width: 12px; height: 12px; }
+.lc-title { font-size: .8rem; font-weight: 800; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.lc-desc { font-size: .7rem; color: var(--muted); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.ig { margin-top: 8px; }
+.ig-btn, .ig-acct { display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 999px; padding: 6px 14px 6px 10px; font-size: .78rem; font-weight: 800; cursor: pointer; text-decoration: none;
+  color: #fff; background: linear-gradient(90deg, #f58529, #dd2a7b 55%, #8134af); }
+.ig-acct { background: var(--surface); color: #c1356b; border: 1.5px solid #e9b3c8; }
+.ig-btn svg, .ig-acct svg { width: 16px; height: 16px; }
+.ig-embed { margin-top: 4px; }
+.ig-embed .instagram-media { margin: 0 !important; min-width: 0 !important; width: 100% !important; }
+@media (prefers-color-scheme: dark) { .t-area { color: var(--main); } .ig-acct { color: #ff8fbd; border-color: #6b3a4f; } }
+
+.prerender article { background: var(--surface); border-radius: 14px; padding: 12px 16px; margin: 0 0 12px; }
+.prerender h3 { margin: 0 0 4px; font-size: 1rem; }
+.prerender p { margin: 2px 0; font-size: .86rem; }
+.empty { text-align: center; padding: 50px 16px; color: var(--muted); }
+.empty svg { width: 48px; height: 48px; color: var(--line); }
+footer { max-width: 1280px; margin: 0 auto; color: var(--muted); font-size: .76rem; text-align: center; padding: 22px 16px 28px; line-height: 1.9; border-top: 2px dashed var(--line); }
+footer a { color: var(--main); font-weight: 700; }
+.totop { position: fixed; right: 16px; bottom: calc(var(--tabbar) + 14px + env(safe-area-inset-bottom)); z-index: 15; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--ink); color: var(--bg); cursor: pointer; display: grid; place-items: center;
+  opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .2s, transform .2s; }
+.totop.show { opacity: .85; transform: none; pointer-events: auto; }
+@media (min-width: 900px) { .totop { bottom: 24px; right: 24px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 6h11M18 6h3M3 12h3M10 12h11M3 18h13M20 18h1"/><circle cx="16" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></symbol>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4Z"/><path d="M14 6v12" stroke-dasharray="2 2.4"/></symbol>
+  <symbol id="i-shop" viewBox="0 0 24 24"><path d="M4 9h16l-1.4-4.2A1 1 0 0 0 17.7 4H6.3a1 1 0 0 0-.9.8Z"/><path d="M4 9a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0A2.7 2.7 0 0 0 20 9"/><path d="M5.5 11.5V20h13v-8.5"/><path d="M10 20v-4.5h4V20"/></symbol>
+  <symbol id="i-food" viewBox="0 0 24 24"><path d="M4 11h16a8 8 0 0 1-16 0Z"/><path d="M9 4c-1 1.2 1 2.2 0 3.5M13 4c-1 1.2 1 2.2 0 3.5M17 4c-1 1.2 1 2.2 0 3.5"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6Z"/><path d="M9 4v14M15 6v14"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+  <symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 18V6M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="2"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></symbol>
+</svg>
+
+<header class="hd">
+  <div class="hd-in">
+    <a class="logo" href="./">
+      <span class="emblem"><img src="logo.jpg" alt="" width="40" height="40"></span>
+      <span class="logo-t"><small>FUKUFUKU PROJECT</small><b>いしかわおでかけ</b></span>
+    </a>
+    <nav class="hd-nav" aria-label="メニュー" data-nav></nav>
+    <label class="hd-search">
+      <svg class="i"><use href="#i-search"/></svg>
+      <input type="search" id="q-pc" placeholder="キーワードで探す" aria-label="キーワード">
+    </label>
+    <button class="hd-btn" id="btn-search" aria-label="キーワードで探す" aria-expanded="false" aria-controls="search-panel"><svg class="i"><use href="#i-search"/></svg></button>
+    <button class="hd-btn" id="btn-filter" aria-label="絞り込み" aria-expanded="false" aria-controls="filter-panel"><svg class="i"><use href="#i-filter"/></svg><span class="t">絞り込み</span><span class="cnt" id="filter-cnt" hidden></span></button>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+<section class="panel from-top" id="search-panel" aria-label="キーワードで探す">
+  <div class="p-head"><h2><svg class="i"><use href="#i-search"/></svg>キーワードで探す</h2><button class="x" data-close aria-label="閉じる"><svg class="i"><use href="#i-x"/></svg></button></div>
+  <form class="field" id="q-form" role="search">
+    <input type="search" id="q" placeholder="例：そば、子ども、美術館" enterkeyhint="search" aria-label="キーワード">
+    <button class="clear" id="q-clear" type="button" aria-label="消す" hidden><svg class="i"><use href="#i-x"/></svg></button>
+  </form>
+  <div class="p-label">よく探されること</div>
+  <div class="pills" id="suggest"></div>
+</section>
+<section class="panel from-bottom" id="filter-panel" aria-label="絞り込み">
+  <div class="p-head"><h2><svg class="i"><use href="#i-filter"/></svg>絞り込み</h2><button class="x" data-close aria-label="閉じる"><svg class="i"><use href="#i-x"/></svg></button></div>
+  <div class="p-label">地域</div>
+  <div class="seg" id="regions"></div>
+  <div class="p-label">市町</div>
+  <div class="pills" id="cities"></div>
+  <div class="p-label">種類</div>
+  <div class="pills" id="kinds"></div>
+  <div class="p-foot"><button id="reset">リセット</button><button class="ok" data-close id="ok">見る</button></div>
+</section>
+
+<main>
+  <div class="today" id="today"></div>
+  <div class="ttl" id="ttl"><h1>石川の今週末のイベント・新しいお店</h1></div>
+  <div class="route" aria-hidden="true"></div>
+  <div class="days" id="days" role="group" aria-label="日付で絞る"></div>
+  <div class="active" id="active"></div>
+  <div id="out"><!--prerender:start-->
+<div class="prerender">
+<h2>開催中・これからの石川のイベント（10月8日時点）</h2>
+<h2>石川に新しくできたお店・スポット</h2>
+</div>
+<!--prerender:end--></div>
+</main>
+
+<footer>
+  Threads <a href="https://www.threads.com/@ishikawa._ishikawa" target="_blank" rel="noopener">@ishikawa._ishikawa</a> が集めた石川の情報をまとめています。<span id="updated"></span><br>
+  日付・内容は集めた時点のものです。お出かけ前に、出典（主催者・お店の公式）で必ず確かめてください。<br>
+  出典のリンクカードには、各ページが共有用に公開している画像・タイトル・説明を表示しています。<br>
+  <!--months:start--><!--months:end-->
+  <a href="./about/">運営者情報・編集方針・プライバシー</a>
+</footer>
+
+<nav class="tabbar" aria-label="メニュー" data-nav></nav>
+<button class="totop" id="totop" aria-label="ページの先頭へ"><svg class="i"><use href="#i-up"/></svg></button>
+
+<script>
+(() => {
+  const AREAS = {
+    "加賀": ["加賀市", "小松市", "白山市", "能美市", "野々市市", "川北町"],
+    "金沢": ["金沢市", "かほく市", "津幡町", "内灘町"],
+    "能登": ["七尾市", "輪島市", "珠洲市", "羽咋市", "志賀町", "宝達志水町", "中能登町", "穴水町", "能登町"],
+  };
+  const KIND_LABEL = { "催し": "イベント", "スポット": "新スポット", "話題": "話題" };
+  const KIND_ICON = { "催し": "i-ticket", "スポット": "i-shop", "話題": "i-bulb" };
+  const FOOD = /グルメ|食|カフェ|珈琲|コーヒー|ランチ|スイーツ|菓子|パン|そば|ラーメン|カニ|ガニ|天ぷら|寿司|すし|米|酒|パティスリー|マルシェ|屋台|味/;
+  const TABS = [
+    ["weekend", "今週末", "i-sun", "今週末、どこ行く？"],
+    ["upcoming", "イベント", "i-ticket", "開催中・これからのイベント"],
+    ["spot", "新スポット", "i-shop", "新しくできた場所"],
+    ["food", "グルメ", "i-food", "食べに行きたいもの"],
+    ["all", "ぜんぶ", "i-map", "ぜんぶの情報"],
+  ];
+  const SUGGEST = ["まつり", "子ども", "美術館", "カフェ", "温泉", "そば", "マルシェ", "夜"];
+  const WD = "日月火水木金土";
+  const NEW_DAYS = 3;
+  const DAY_SPAN = 14;
+
+  const state = { tab: "upcoming", area: "", kind: "", q: "", day: "", showEnded: false }; // 終わったものは最初は隠す
+  try {
+    const saved = JSON.parse(localStorage.getItem("odekake") || "{}");
+    if (TABS.some((t) => t[0] === saved.tab)) state.tab = saved.tab;
+    if (typeof saved.area === "string") state.area = saved.area;
+  } catch (_) {}
+
+  const $ = (s) => document.querySelector(s);
+  const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+  const icon = (id) => { const s = document.createElementNS("http://www.w3.org/2000/svg", "svg"); s.setAttribute("class", "i");
+    const u = document.createElementNS("http://www.w3.org/2000/svg", "use"); u.setAttribute("href", "#" + id); s.append(u); return s; };
+  const pd = (s) => s ? new Date(s + "T00:00:00") : null;
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+  const fmt = (d) => `${d.getMonth() + 1}/${d.getDate()}(${WD[d.getDay()]})`;
+  const dow = today.getDay();
+  const sat = dow === 0 ? addDays(today, -1) : addDays(today, 6 - dow);
+  const sun = addDays(sat, 1);
+
+  let items = [];
+  let newSince = null;
+  const isNew = (it) => newSince && pd(it.written) >= newSince;
+
+  function titleOf(it) {
+    const m = it.text.match(/「([^」]{2,40})」/);
+    if (m) return m[1];
+    const first = it.text.replace(/^[\d/()（）・\-〜～月火水木金土日祝時分\s]+/, "").split(/[。．]/)[0];
+    return first.length > 44 ? first.slice(0, 43) + "…" : first;
+  }
+
+  function when(it) {
+    const s = pd(it.start), e = pd(it.end);
+    if (!s) return it.kind === "催し" ? "日程は出典で" : "";
+    if (it.kind === "スポット") return `${s.getFullYear()}年${s.getMonth() + 1}月${s.getDate()}日オープン`;
+    return +s === +e ? fmt(s) : `${fmt(s)} 〜 ${fmt(e)}`;
+  }
+
+  function soon(it) {
+    const s = pd(it.start), e = pd(it.end);
+    if (!s) return "";
+    if (it.kind === "スポット") return s > today ? "まもなく" : "";
+    if (ended(it)) return "終了";
+    if (s <= today && today <= e) return +s === +e ? "今日" : +e === +today ? "今日まで" : endsThisWeek(it) ? "今週末まで" : "開催中";
+    if (s <= sun && e >= sat) return "今週末";
+    const days = Math.round((s - today) / 864e5);
+    if (days > 0 && days <= 7) return `あと${days}日`;
+    return "";
+  }
+
+  // スタンプ：イベントは「次に行ける日」、スポットは OPEN
+  function stamp(it) {
+    const s = pd(it.start), e = pd(it.end);
+    if (!s) return null;
+    if (it.kind === "スポット") return { cls: "spot", m: `${s.getMonth() + 1}月`, dd: "OPEN", wd: "" };
+    // 終わったものは最終日に「終了」
+    if (e < today) return { cls: "", m: `${e.getMonth() + 1}月`, dd: String(e.getDate()), wd: "終了" };
+    // 日付を選んでいるときはその日、開催中なら今日、これからなら初日
+    const picked = state.day && pd(state.day);
+    const ongoing = s < today && e >= today;
+    const d = picked && s <= picked && picked <= e ? picked : ongoing ? today : s;
+    const label = d === picked ? WD[d.getDay()] + "曜" : ongoing ? "開催中" : WD[d.getDay()] + "曜";
+    return { cls: "", m: `${d.getMonth() + 1}月`, dd: String(d.getDate()), wd: label };
+  }
+
+  function inTab(it, tab = state.tab) {
+    const s = pd(it.start), e = pd(it.end);
+    switch (tab) {
+      case "weekend": return it.kind !== "スポット" && s && s <= sun && e >= sat;
+      case "upcoming": return it.kind === "催し" && (!e || e >= today);
+      case "spot": return it.kind === "スポット";
+      case "food": return FOOD.test(it.text) && (it.kind === "スポット" || !e || e >= today);
+      case "stay": return false;   // 泊まるタブは hotels.json を出す
+      default: return true;
+    }
+  }
+  const inArea = (it) => !state.area || it.area === state.area || it.region === state.area;
+  const inKind = (it) => !state.kind || it.kind === state.kind;
+  const onDay = (it, day) => { const s = pd(it.start), e = pd(it.end), d = pd(day); return it.kind !== "スポット" && s && s <= d && d <= e; };
+  const inDay = (it) => !state.day || onDay(it, state.day);
+  const inQ = (it) => {
+    if (!state.q) return true;
+    const hay = (it.text + it.note + (it.area || "") + (it.region || "")).toLowerCase();
+    return state.q.toLowerCase().split(/\s+/).every((w) => hay.includes(w));
+  };
+  const base = (it) => inArea(it) && inKind(it) && inQ(it);
+
+  // 並び順の段（小さいほど上）。日付は年付きで比べる
+  //   0 話題・おすすめ（「ぜんぶ」だけ）→ 1 いま開催中 → 2 これから → 3 新しくできた場所
+  //   → 4 日程未定の催し → 5 話題 → 6 終わったもの
+  const ended = (it) => it.kind !== "スポット" && it.end && pd(it.end) < today;
+  // 会期が LONG_DAYS 日以上の催し（展示・フェア・スタンプラリーなど）は「期間中いつでも」として下げる。
+  // ずっと開催中のものが一覧の上に居座らないように（2026-10-02 代表指示）
+  const LONG_DAYS = 8;
+  const spanDays = (it) => it.start && it.end ? Math.round((pd(it.end) - pd(it.start)) / 864e5) + 1 : 1;
+  const isLong = (it) => it.kind !== "スポット" && spanDays(it) >= LONG_DAYS;
+  const started = (it) => it.start && pd(it.start) <= today && !ended(it);
+  // 今週末（日曜）までに終わる、開催中のもの。長期のものも含めて一番上に出す
+  const endsThisWeek = (it) => it.kind !== "スポット" && started(it) && pd(it.end) <= sun;
+
+  // 並びの段（小さいほど上）
+  //   0 話題・おすすめ（「ぜんぶ」だけ）→ 1 今週末まで → 2 いま開催中（短い催し）→ 3 これから
+  //   → 4 期間中いつでも（長期）→ 5 新しくできた場所 → 6 日程未定の催し → 7 話題 → 8 終わったもの
+  function rankOf(it) {
+    const s = pd(it.start);
+    if (state.tab === "all" && ((it.pick && !ended(it)) || (!s && it.kind === "話題"))) return 0;
+    if (it.kind === "スポット") return 5;
+    if (!s) return it.kind === "催し" ? 6 : 7;
+    if (ended(it)) return 8;
+    if (endsThisWeek(it)) return 1;
+    if (s > today) return 3;
+    return isLong(it) ? 4 : 2;
+  }
+  const FAR = 4e12; // 日時の数値（ミリ秒）より大きい値。新しい順にしたいときに引く
+  function sortKey(it) {
+    const s = pd(it.start), e = pd(it.end);
+    const w = pd(it.written);
+    if (state.tab === "spot") return FAR - +(s || w);
+    const r = rankOf(it);
+    // おすすめ：代表が足したものを先に、新しく集めた順。同じ日なら後から書いた行を先に
+    const v = r === 0 ? (it.pick ? 0 : 1e12) + FAR / 2 - +w + 1e6 - it._i
+      : r === 1 || r === 2 || r === 4 ? +e // 開催中：終わりが近い順
+      : r === 3 ? +s                       // これから：始まりが近い順
+      : r === 5 ? FAR - +(s || w)          // 新しい場所：新しい順
+      : r === 8 ? FAR - +e                 // 終わったもの：最近終わった順
+      : FAR - +w;                          // 日付なし：最近集めた順
+    return r * 1e13 + v;
+  }
+
+  function groupOf(it) {
+    if (state.tab === "weekend" || state.tab === "spot" || state.day) return "";
+    const s = pd(it.start);
+    switch (rankOf(it)) {
+      case 0: return "話題・おすすめ";
+      case 1: return "今週末まで";
+      case 2: return "いま開催中";
+      case 3: return s.getFullYear() === today.getFullYear()
+        ? `${s.getMonth() + 1}月のおでかけ` : `${s.getFullYear()}年${s.getMonth() + 1}月のおでかけ`;
+      case 4: return "期間中いつでも";
+      case 5: return "新しくできた場所";
+      case 6: return "日程は出典で・随時";
+      case 7: return "話題・おすすめ";
+      default: return "終わったもの";
+    }
+  }
+
+  function hostOf(url) {
+    try { return new URL(url).hostname.replace(/^www\./, ""); } catch (_) { return "出典"; }
+  }
+
+  // 出典のリンクカード。SNS のリンクプレビューと同じく、出典ページが共有用に用意した
+  // 画像・タイトル・説明をそのまま小さく出し、出典ページへ飛ばす
+  function linkCard(it) {
+    const og = it.og || {};
+    const a = el("a", "lc");
+    a.href = it.source; a.target = "_blank"; a.rel = "noopener";
+    if (og.image) {
+      const box = el("span", "lc-img");
+      const im = el("img");
+      im.loading = "lazy"; im.decoding = "async"; im.alt = ""; im.referrerPolicy = "no-referrer";
+      im.src = og.image;
+      im.onerror = () => box.remove();
+      box.append(im); a.append(box);
+    }
+    const t = el("span", "lc-txt");
+    const site = el("span", "lc-site");
+    site.append(icon("i-out"), og.site ? `${og.site}・${hostOf(it.source)}` : hostOf(it.source));
+    t.append(site, el("span", "lc-title", og.title || (/\.pdf($|\?)/i.test(it.source) ? "発表資料（PDF）を開く" : "出典ページを開く")));
+    if (og.description) t.append(el("span", "lc-desc", og.description));
+    a.append(t);
+    return a;
+  }
+
+  // Instagram：投稿・リールは公式の埋め込みで出す。押したときだけ読み込む
+  // （最初から全部読むと重く、見るだけで Meta へ通信が飛ぶため）
+  const IG_POST = /^https:\/\/(www\.)?instagram\.com\/(?:[A-Za-z0-9._]+\/)?(p|reels?|tv)\/[A-Za-z0-9_-]+/;
+  const IG_ACCT = /^https:\/\/(www\.)?instagram\.com\/([A-Za-z0-9._]+)\/?$/;
+  const isIg = (u) => /^https:\/\/(www\.)?instagram\.com\//.test(u || "");
+  let igScript = null;
+  function loadIgEmbed() {
+    if (window.instgrm) { window.instgrm.Embeds.process(); return; }
+    if (igScript) return;
+    igScript = document.createElement("script");
+    igScript.async = true;
+    igScript.src = "https://www.instagram.com/embed.js";
+    document.body.append(igScript);
+  }
+  function igBlock(url) {
+    const box = el("div", "ig");
+    if (IG_POST.test(url)) {
+      const btn = el("button", "ig-btn");
+      btn.type = "button";
+      btn.append(icon("i-ig"), "Instagram の投稿を見る");
+      btn.onclick = () => {
+        const wrap = el("div", "ig-embed");
+        const bq = el("blockquote", "instagram-media");
+        bq.setAttribute("data-instgrm-permalink", url.replace("/reels/", "/reel/").replace(/\/?$/, "/"));
+        bq.setAttribute("data-instgrm-version", "14");
+        const a = el("a", null, "Instagram で見る"); a.href = url; a.target = "_blank"; a.rel = "noopener";
+        bq.append(a); wrap.append(bq);
+        btn.replaceWith(wrap);
+        loadIgEmbed();
+      };
+      box.append(btn);
+    } else {
+      const m = url.match(IG_ACCT);
+      const a = el("a", "ig-acct");
+      a.href = url; a.target = "_blank"; a.rel = "noopener";
+      a.append(icon("i-ig"), m ? `@${m[2]}` : "Instagram");
+      box.append(a);
+    }
+    return box;
+  }
+
+  function card(it) {
+    const li = el("li", `ticket ${it.kind}` + (ended(it) ? " done" : ""));
+    const main = el("div", "t-main");
+
+    const st = stamp(it);
+    const s = el("div", "stamp " + (st ? st.cls : "icon"));
+    if (st) { s.append(el("span", "m", st.m), el("span", "dd", st.dd)); if (st.wd) s.append(el("span", "wd", st.wd)); }
+    else s.append(icon(KIND_ICON[it.kind] || "i-pin"));
+    main.append(s);
+
+    const tx = el("div", "t-text");
+    const tags = el("div", "t-tags");
+    const k = el("span", "kind"); k.append(el("i"), KIND_LABEL[it.kind]); tags.append(k);
+    if (isNew(it)) tags.append(el("span", "new", "NEW"));
+    const so = soon(it); if (so) tags.append(el("span", so === "終了" ? "soon done" : "soon", so));
+    tx.append(tags);
+    const w = when(it); if (w) tx.append(el("div", "t-when", w));
+    tx.append(el("h3", "t-title", titleOf(it)));
+    if (it.note) tx.append(el("p", "t-note", it.note));
+    if (it.area) { const ar = el("span", "t-area"); ar.append(icon("i-pin"), it.area); tx.append(ar); }
+    main.append(tx);
+    li.append(main);
+
+    // 出典がインスタのときはリンクカードを作れない（中身が取れない）ので、インスタの枠で出す
+    const ig = it.instagram || (isIg(it.source) ? it.source : null);
+    const showSource = it.source && !isIg(it.source);
+    if (showSource || ig) {
+      li.append(el("div", "perf"));
+      const stub = el("div", "stub");
+      stub.append(el("div", "stub-label", showSource ? "出典" : "出典（Instagram）"));
+      if (showSource) stub.append(linkCard(it));
+      if (ig) stub.append(igBlock(ig));
+      li.append(stub);
+    }
+    return li;
+  }
+
+  function renderNav() {
+    document.querySelectorAll("[data-nav]").forEach((nav) => {
+      nav.textContent = "";
+      const bar = nav.classList.contains("tabbar");
+      for (const [key, label, ic] of TABS) {
+        const b = el("button");
+        b.dataset.tab = key;
+        b.title = label;
+        b.setAttribute("aria-pressed", state.tab === key);
+        if (bar) { const w = el("span", "ic"); w.append(icon(ic)); b.append(w, label); }
+        else { b.append(icon(ic), el("span", null, label)); }
+        if (key !== "all" && items.some((it) => isNew(it) && inTab(it, key))) b.append(el("span", "dot"));
+        nav.append(b);
+      }
+    });
+  }
+
+  // PC のメニュー：文字付きで入りきるかを実際に測り、入らなければアイコンだけにする
+  // （画面の幅だけで決めると、表示倍率やフォントの違いでロゴに重なることがある）
+  function fitNav() {
+    const nav = document.querySelector(".hd-nav");
+    if (!nav || getComputedStyle(nav).display === "none") return;
+    nav.classList.remove("compact");
+    if (nav.scrollWidth > nav.clientWidth + 1) nav.classList.add("compact");
+  }
+  addEventListener("resize", fitNav);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitNav);
+
+  function renderDays() {
+    const box = $("#days");
+    box.textContent = "";
+    const show = state.tab !== "spot" && state.tab !== "stay";
+    box.hidden = !show;
+    if (!show) return;
+    for (let i = 0; i < DAY_SPAN; i++) {
+      const d = addDays(today, i), key = iso(d);
+      // 長期の催しは毎日に数えると件数が横並びになるので、日ごとの件数には入れない
+      const n = items.filter((it) => inTab(it) && base(it) && onDay(it, key) && !isLong(it)).length;
+      const b = el("button", "day" + (d.getDay() === 6 ? " sat" : d.getDay() === 0 ? " sun" : "") + (i === 0 ? " today-d" : "") + (n ? "" : " zero"));
+      b.dataset.day = key;
+      b.setAttribute("aria-pressed", state.day === key);
+      b.setAttribute("aria-label", `${fmt(d)} ${n}件`);
+      b.append(el("span", "w", i === 0 ? "今日" : WD[d.getDay()]), el("span", "d", String(d.getDate())), el("span", "c", n ? `${n}件` : ""));
+      box.append(b);
+    }
+  }
+
+  function renderPanel() {
+    const regions = $("#regions"); regions.textContent = "";
+    const region = state.area in AREAS ? state.area : Object.keys(AREAS).find((r) => AREAS[r].includes(state.area)) || "";
+    [["", "石川県"], ["加賀", "加賀"], ["金沢", "金沢"], ["能登", "能登"]].forEach(([v, l]) => {
+      const b = el("button", null, l); b.setAttribute("aria-pressed", region === v && (v === "" ? !state.area : true));
+      b.onclick = () => { state.area = v; render(); }; regions.append(b);
+    });
+    const present = new Set(items.map((it) => it.area).filter(Boolean));
+    const cities = $("#cities"); cities.textContent = "";
+    const list = region ? AREAS[region] : Object.values(AREAS).flat();
+    list.filter((c) => present.has(c)).forEach((c) => {
+      const b = el("button", "pill", c); b.setAttribute("aria-pressed", state.area === c);
+      b.onclick = () => { state.area = state.area === c ? region : c; render(); }; cities.append(b);
+    });
+    const kinds = $("#kinds"); kinds.textContent = "";
+    [["", "ぜんぶ"], ["催し", "イベント"], ["スポット", "新スポット"], ["話題", "話題"]].forEach(([v, l]) => {
+      const b = el("button", "pill", l); b.setAttribute("aria-pressed", state.kind === v);
+      b.onclick = () => { state.kind = v; render(); }; kinds.append(b);
+    });
+    const sug = $("#suggest"); sug.textContent = "";
+    SUGGEST.forEach((w) => {
+      const b = el("button", "pill", w); b.type = "button"; b.setAttribute("aria-pressed", state.q === w);
+      b.onclick = () => { setQ(state.q === w ? "" : w); open(null); }; sug.append(b);
+    });
+  }
+
+  // 泊まる：楽天トラベルの宿（hotels.json）。アフィリエイトなので「PR」と明記する
+  let hotels = [];
+  const STAY_FEATS = [["", "すべて"], ["温泉", "温泉"], ["露天風呂", "露天風呂"], ["サウナ", "サウナ"],
+    ["朝食バイキング", "朝食バイキング"], ["貸切", "一棟貸し・グランピング"]];
+  const hasFeat = (h, f) => !f || (f === "貸切" ? h.features.some((x) => x === "一棟貸し" || x === "グランピング") : h.features.includes(f));
+  const yen = (n) => n.toLocaleString("ja-JP");
+
+  function hotelCard(h) {
+    const li = el("li", "hotel");
+    const im = el("div", "h-img");
+    if (h.image) {
+      const img = el("img"); img.loading = "lazy"; img.decoding = "async"; img.alt = ""; img.src = h.image;
+      img.onerror = () => img.remove();
+      im.append(img);
+    }
+    im.append(el("span", "pr", "PR"));
+    if (h.rating) {
+      const r = el("span", "rate"); r.append(icon("i-star"), String(h.rating));
+      if (h.reviews) r.append(el("small", null, `（${yen(h.reviews)}件）`));
+      im.append(r);
+    }
+    li.append(im);
+    const b = el("div", "h-body");
+    const ar = el("span", "t-area"); ar.append(icon("i-pin"), h.city); b.append(ar);
+    b.append(el("h3", "h-name", h.name));
+    if (h.text) b.append(el("p", "h-text", h.text));
+    if (h.features.length) { const f = el("div", "h-feats"); h.features.forEach((x) => f.append(el("span", null, x))); b.append(f); }
+    const foot = el("div", "h-foot");
+    const pr = el("div", "h-price");
+    if (h.price) { pr.append("楽天トラベルの最安", el("b", null, `${yen(h.price)}円〜`)); }
+    foot.append(pr);
+    const go = el("a", "h-go"); go.href = h.url; go.target = "_blank"; go.rel = "sponsored noopener";
+    go.append("楽天トラベルで見る", icon("i-out"));
+    foot.append(go);
+    b.append(foot);
+    li.append(b);
+    return li;
+  }
+
+  function renderStay() {
+    const inArea2 = (h) => !state.area || h.city === state.area || h.region === state.area;
+    const inQ2 = (h) => !state.q || state.q.toLowerCase().split(/\s+/).every((w) =>
+      (h.name + h.text + h.city + h.area + h.features.join("")).toLowerCase().includes(w));
+    // おすすめ順：評価を口コミの数で割り引いて比べる（口コミ数件の満点が上に来すぎないように）。
+    // 口コミ 30 件ぶん、評価 4.0 があるものとして平均する。評価の無い宿は後ろ
+    const score = (h) => h.rating ? (h.rating * (h.reviews || 0) + 4.0 * 30) / ((h.reviews || 0) + 30) : 0;
+    const list = hotels.filter((h) => inArea2(h) && inQ2(h) && hasFeat(h, state.feat))
+      .sort((a, b) => score(b) - score(a) || (b.reviews || 0) - (a.reviews || 0));
+    const ttl = $("#ttl"); ttl.textContent = "";
+    const ic = el("span", "ic"); ic.append(icon("i-bed"));
+    const cnt = el("span", "n"); cnt.append(el("b", null, String(list.length)), "軒");
+    ttl.append(ic, el("h1", null, "石川に泊まる"), cnt);
+
+    const active = $("#active"); active.textContent = "";
+    const pill = (label, clear) => { const x = el("button"); x.append(label, icon("i-x")); x.onclick = () => { clear(); render(); }; active.append(x); };
+    if (state.area) pill(state.area, () => (state.area = ""));
+    if (state.q) pill(`「${state.q}」`, () => setQ("", true));
+    $("#ok").textContent = `${list.length}軒を見る`;
+
+    const out = $("#out"); out.textContent = "";
+    const note = el("div", "pr-note");
+    note.append(el("b", null, "PR"), "このタブは楽天トラベルのアフィリエイトリンクを含みます。");
+    out.append(note);
+    const feats = el("div", "feats");
+    STAY_FEATS.forEach(([v, l]) => {
+      const x = el("button", "pill", l); x.type = "button"; x.setAttribute("aria-pressed", (state.feat || "") === v);
+      x.onclick = () => { state.feat = v; render(); };
+      feats.append(x);
+    });
+    out.append(feats);
+    if (!list.length) {
+      const p = el("div", "empty"); p.append(icon("i-bed"), el("p", null, "当てはまる宿がありません。エリアや条件を変えてみてください。"));
+      out.append(p); return;
+    }
+    const ul = el("ul", "grid"); list.forEach((h) => ul.append(hotelCard(h))); out.append(ul);
+  }
+
+  function render() {
+    try { localStorage.setItem("odekake", JSON.stringify({ tab: state.tab, area: state.area })); } catch (_) {}
+    renderNav(); fitNav(); renderDays(); renderPanel();
+
+    const n = (state.area ? 1 : 0) + (state.kind ? 1 : 0);
+    $("#filter-cnt").hidden = !n; $("#filter-cnt").textContent = n;
+    if (state.tab === "stay") { renderStay(); return; }
+
+    const matched = items.filter((it) => inTab(it) && base(it) && inDay(it));
+    // 終わったものは「ぜんぶ」タブにしか入らない。切り替えボタンで出し入れする
+    const endedCount = matched.filter(ended).length;
+    const list = matched.filter((it) => state.showEnded || !ended(it)).sort((a, b) => sortKey(a) - sortKey(b));
+    const tab = TABS.find((t) => t[0] === state.tab);
+    const ttl = $("#ttl"); ttl.textContent = "";
+    const ic = el("span", "ic"); ic.append(icon(tab[2]));
+    const cnt = el("span", "n"); cnt.append(el("b", null, String(list.length)), "件");
+    ttl.append(ic, el("h1", null, state.day ? `${fmt(pd(state.day))}のおでかけ` : tab[3]), cnt);
+
+    const active = $("#active"); active.textContent = "";
+    const pill = (label, clear) => { const b = el("button"); b.append(label, icon("i-x")); b.setAttribute("aria-label", label + " を外す"); b.onclick = () => { clear(); render(); }; active.append(b); };
+    if (state.day) pill(fmt(pd(state.day)), () => (state.day = ""));
+    if (state.area) pill(state.area, () => (state.area = ""));
+    if (state.kind) pill(KIND_LABEL[state.kind], () => (state.kind = ""));
+    if (state.q) pill(`「${state.q}」`, () => setQ("", true));
+    $("#ok").textContent = `${list.length}件を見る`;
+
+    const out = $("#out"); out.textContent = "";
+    const endedToggle = () => {
+      if (!endedCount) return;
+      const b = el("button", "ended-toggle");
+      b.type = "button";
+      b.setAttribute("aria-pressed", state.showEnded);
+      b.append(icon(state.showEnded ? "i-up" : "i-cal"),
+        state.showEnded ? "終わったものを隠す" : `終わったものも見る（${endedCount}件）`);
+      b.onclick = () => { state.showEnded = !state.showEnded; render(); };
+      out.append(b);
+    };
+    if (!list.length) {
+      const p = el("div", "empty");
+      p.append(icon("i-map"), el("p", null, endedCount && !state.showEnded
+        ? "開催中・これからのものはありません。終わったものは下のボタンで見られます。"
+        : "当てはまるものがありません。日付や地域、キーワードを変えてみてください。"));
+      out.append(p); endedToggle(); return;
+    }
+    let cur = null, ul = null;
+    for (const it of list) {
+      const g = groupOf(it);
+      if (g !== cur || !ul) {
+        cur = g;
+        if (g) { const h = el("h2", "group"); h.append(icon(g === "いま開催中" || g === "今週末まで" ? "i-ticket" : g.startsWith("新") ? "i-shop" : "i-cal"), g); out.append(h); }
+        ul = el("ul", "grid"); out.append(ul);
+      }
+      ul.append(card(it));
+    }
+    endedToggle();
+  }
+
+  // 検索：スマホは上から出るパネル、PC はヘッダーの欄。どちらも同じ状態を使う
+  function setQ(v, silent) {
+    state.q = v.trim();
+    $("#q").value = v; $("#q-pc").value = v;
+    $("#q-clear").hidden = !v;
+    if (!silent) render();
+  }
+  $("#q").addEventListener("input", (e) => setQ(e.target.value));
+  $("#q-pc").addEventListener("input", (e) => setQ(e.target.value));
+  $("#q-form").addEventListener("submit", (e) => { e.preventDefault(); $("#q").blur(); open(null); });
+  $("#q-clear").onclick = () => { setQ(""); $("#q").focus(); };
+
+  const panels = { search: [$("#search-panel"), $("#btn-search")], filter: [$("#filter-panel"), $("#btn-filter")] };
+  function open(which) {
+    for (const [k, [p, b]] of Object.entries(panels)) { p.classList.toggle("open", k === which); b.setAttribute("aria-expanded", k === which); }
+    $("#scrim").classList.toggle("open", !!which);
+    if (which === "search") setTimeout(() => $("#q").focus(), 200);
+  }
+  $("#btn-search").onclick = () => open($("#search-panel").classList.contains("open") ? null : "search");
+  $("#btn-filter").onclick = () => open($("#filter-panel").classList.contains("open") ? null : "filter");
+  $("#scrim").onclick = () => open(null);
+  document.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", () => open(null)));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") open(null); });
+  $("#reset").onclick = () => { state.area = ""; state.kind = ""; render(); };
+
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest("[data-nav] [data-tab]");
+    if (t) { state.tab = t.dataset.tab; state.day = ""; state.showEnded = false; state.feat = ""; render(); if (scrollY > 150) scrollTo({ top: 0 }); return; }
+    const d = e.target.closest("#days [data-day]");
+    if (d) { state.day = state.day === d.dataset.day ? "" : d.dataset.day; render(); }
+  });
+
+  const tt = $("#totop");
+  tt.onclick = () => scrollTo({ top: 0, behavior: "smooth" });
+  addEventListener("scroll", () => tt.classList.toggle("show", scrollY > 700), { passive: true });
+
+  const toSat = Math.round((sat - today) / 864e5);
+  $("#today").append(icon("i-cal"), `今日は ${fmt(today)}`);
+  if (toSat > 0) { const s = el("span"); s.append("・週末まであと", el("b", null, `${toSat}日`)); $("#today").append(s); }
+  else $("#today").append("・週末です！");
+
+  fetch("hotels.json", { cache: "no-cache" })
+    .then((r) => r.json())
+    .then((d) => { hotels = d.items || []; if (state.tab === "stay") render(); })
+    .catch(() => {});
+
+  fetch("data.json", { cache: "no-cache" })
+    .then((r) => r.json())
+    .then((data) => {
+      items = data.items || [];
+      items.forEach((it, i) => { it._i = i; });
+      if (data.updated) {
+        $("#updated").textContent = `（${data.updated.replace(/-/g, "/")} 更新）`;
+        newSince = addDays(pd(data.updated), -(NEW_DAYS - 1));
+      }
+      const present = new Set(items.flatMap((it) => [it.area, it.region]));
+      if (state.area && !present.has(state.area)) state.area = "";
+      render();
+    })
+    .catch(() => { $("#out").innerHTML = '<p class="empty">データを読み込めませんでした。</p>'; });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

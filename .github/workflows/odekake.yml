@@ -1,0 +1,44 @@
+name: おでかけサイトの更新
+
+# ネタ帳が予約画面や手で直されたとき、おでかけサイト（docs/ のトップ）のデータを作り直す。
+# 毎朝の収集ぶんは neta-collect.yml の中で続けて行う（GITHUB_TOKEN のコミットでは
+# このワークフローが起動しないため）。
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "neta/ネタ帳.md"
+      - "scripts/おでかけ.py"
+      - "scripts/おでかけ_宿.py"
+      - "scripts/宿.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: odekake
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: データを作り直す
+        run: python scripts/おでかけ.py --thumbs
+      - name: 宿のデータを作り直す
+        run: python scripts/おでかけ_宿.py --images
+      - name: コミットする
+        run: |
+          ./scripts/commit_file.sh docs/data.json "chore(odekake): ネタ帳からサイトのデータを更新"
+          ./scripts/commit_file.sh docs/index.html "chore(odekake): 検索向けの静的な中身を更新"
+          ./scripts/commit_file.sh docs/sitemap.xml "chore(odekake): サイトマップを更新"
+          # 月別ページは増えたり消えたりするので、新しいファイルも差分に出るようにしてから
+          if [ -d docs/month ]; then git add -N docs/month; fi
+          ./scripts/commit_file.sh docs/month "chore(odekake): 月別ページを更新"
+          ./scripts/commit_file.sh docs/hotels.json "chore(odekake): 宿のデータを更新"

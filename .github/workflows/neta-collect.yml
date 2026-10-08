@@ -1,0 +1,91 @@
+name: ネタ帳を埋める
+
+# neta/設定.json の「通す質問」で Web 検索し、出典URLの辿れる出来事だけを
+# neta/ネタ帳.md の「書き足す場所」の下に追記してコミットする。
+#
+# 毎朝 7:00 (JST) = 前日 22:00 (UTC)。外部 cron は要らない。
+# 手で回したいときは Actions タブ → このワークフロー → Run workflow。
+on:
+  # 外部 cron（cron-job.org）から叩く入口。GitHub の schedule は遅延するため。
+  repository_dispatch:
+    types: [neta-collect]
+  schedule:
+    - cron: "0 22 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "ファイルに書かず、集まったものを表示するだけ"
+        type: boolean
+        default: false
+      crawl_only:
+        description: "巡回先を見に行くところまでで止める（API を叩かない）"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# 予約画面やほかのワークフローと同じファイルを触るので、重ねて走らせない
+concurrency:
+  group: neta-collect
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 集めて ネタ帳.md に追記する
+        id: collect
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+          CRAWL_ONLY: ${{ (inputs.crawl_only || github.event.client_payload.crawl_only) && '1' || '' }}
+        run: node scripts/neta-collect.mjs | tee -a "$GITHUB_STEP_SUMMARY"
+
+      # 追記が0件でも、「調べてほしいもの」欄から解決ぶんを消しただけの変更がありうる。
+      # 変更の有無はステップの中で git diff で見ているので、ここでは絞らない。
+      - name: コミットする
+        if: ${{ !inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          TARGET="neta/ネタ帳.md"
+          if git diff --quiet -- "${TARGET}"; then
+            echo "${TARGET} に変更なし。コミットはしません。"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${TARGET}"
+          git commit -m "chore(neta): $(TZ=Asia/Tokyo date +%F) のぶんを追記"
+          # 予約画面からの記録と衝突しうるので、rebase してから push する
+          for attempt in 1 2 3 4; do
+            if git pull --rebase origin "${GITHUB_REF_NAME}" && git push; then
+              exit 0
+            fi
+            wait=$((2 ** attempt))
+            echo "push に失敗。${wait} 秒待って再試行します。"
+            sleep "${wait}"
+          done
+          exit 1
+
+      # ネタ帳からおでかけサイト（docs/ のトップ）のデータを作り直す。
+      # 上のコミットは GITHUB_TOKEN なので odekake.yml は起動しない。ここで続けて行う。
+      - name: おでかけサイトを更新する
+        if: ${{ !inputs.dry_run }}
+        run: |
+          python3 scripts/おでかけ.py --thumbs
+          ./scripts/commit_file.sh docs/data.json "chore(odekake): ネタ帳からサイトのデータを更新"
+          ./scripts/commit_file.sh docs/index.html "chore(odekake): 検索向けの静的な中身を更新"
+          ./scripts/commit_file.sh docs/sitemap.xml "chore(odekake): サイトマップを更新"
+          # 月別ページは増えたり消えたりするので、新しいファイルも差分に出るようにしてから
+          if [ -d docs/month ]; then git add -N docs/month; fi
+          ./scripts/commit_file.sh docs/month "chore(odekake): 月別ページを更新"
+          # 宿のリストは X のリポジトリで更新されるので、毎朝ここで取り直す
+          python3 scripts/おでかけ_宿.py --images
+          ./scripts/commit_file.sh docs/hotels.json "chore(odekake): 宿のデータを更新"
