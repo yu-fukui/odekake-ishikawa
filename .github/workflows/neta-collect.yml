@@ -3,14 +3,15 @@ name: ネタ帳を埋める
 # neta/設定.json の「通す質問」で Web 検索し、出典URLの辿れる出来事だけを
 # neta/ネタ帳.md の「書き足す場所」の下に追記してコミットする。
 #
-# 毎朝 7:00 (JST) = 前日 22:00 (UTC)。外部 cron は要らない。
+# 毎朝 7:00 (JST) に外部 cron（cron-job.org）から neta-collect で起動する。
 # 手で回したいときは Actions タブ → このワークフロー → Run workflow。
 on:
-  # 外部 cron（cron-job.org）から叩く入口。GitHub の schedule は遅延するため。
+  # 外部 cron（cron-job.org）から叩く入口。
   repository_dispatch:
     types: [neta-collect]
-  schedule:
-    - cron: "0 22 * * *"
+  # 2026-10-08 代表指示「情報あつめ、どちらも正常に動いているなら、片方は止めてください」。
+  # GitHub の schedule は 2〜3 時間遅れて動き、cron-job.org の起動と合わせて毎日2回
+  # まるごと収集していた（1回あたり約1ドル）。cron-job.org の起動だけを残す。
   workflow_dispatch:
     inputs:
       dry_run:
