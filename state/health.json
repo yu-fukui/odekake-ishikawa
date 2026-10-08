@@ -1,6 +1,6 @@
 {
   "リポジトリ": "yu-fukui/odekake-ishikawa",
-  "作成時刻": "2026-10-08 16:32 JST",
+  "作成時刻": "2026-10-08 17:08 JST",
   "今日": "2026-10-08",
   "状態": "ok",
   "明日のキュー": {
@@ -37,7 +37,7 @@
         "id": "p-2026100808-ogha",
         "時刻": "08:00",
         "1行目": "9月17日、野々市市御経塚に「Mano All Day Cafe & Roast",
-        "文字数": 88,
+        "文字数": 64,
         "本文にリンク": false,
         "続きにリンク": true,
         "出典元あり": true,
@@ -67,7 +67,7 @@
         "id": "p-2026100814-2gu3",
         "時刻": "14:00",
         "1行目": "少し肌寒くなってきた10月。石川で温かいものが食べたくなったら、何を選びますか？",
-        "文字数": 129,
+        "文字数": 121,
         "本文にリンク": false,
         "続きにリンク": false,
         "出典元あり": false,
@@ -77,7 +77,7 @@
         "id": "p-2026100815-xb9q",
         "時刻": "15:00",
         "1行目": "明日10月10日（土）と11日（日）、金沢市役所庁舎前広場で「かなざわ国際交流ま",
-        "文字数": 76,
+        "文字数": 83,
         "本文にリンク": false,
         "続きにリンク": true,
         "出典元あり": true,
@@ -87,7 +87,7 @@
         "id": "p-2026100817-2acl",
         "時刻": "17:00",
         "1行目": "10月25日（日）は「金沢マラソン2026」。",
-        "文字数": 55,
+        "文字数": 63,
         "本文にリンク": false,
         "続きにリンク": true,
         "出典元あり": true,
@@ -116,8 +116,8 @@
       {
         "id": "p-2026100823-ka8e",
         "時刻": "23:00",
-        "1行目": "小松市の粟津温泉に、米粉専門の洋菓子店「Soavé（ソアーヴ）」が9月10日にオ",
-        "文字数": 58,
+        "1行目": "小松市の粟津温泉に、米粉専門の洋菓子店「Soave（ソアーヴ）」がオープンしたそ",
+        "文字数": 52,
         "本文にリンク": false,
         "続きにリンク": true,
         "出典元あり": true,
@@ -147,30 +147,36 @@
       "ファイル": "health-snapshot.yml",
       "有効": true,
       "最後の実行": {
-        "時刻": "2026-10-08 16:31 JST",
+        "時刻": "2026-10-08 17:07 JST",
         "結果": "in_progress",
         "きっかけ": "workflow_run",
-        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37744013841"
+        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37747804925"
       },
-      "最後の成功": null,
+      "最後の成功": "2026-10-08 16:31 JST",
       "今日走ったか": true,
-      "24時間の実行": 1,
+      "24時間の実行": 2,
       "24時間の失敗": 0,
       "判定": "実行中"
+    },
+    {
+      "名前": "宿リストを作る",
+      "ファイル": "hotel-collect.yml",
+      "有効": true,
+      "判定": "一度も走っていない"
     },
     {
       "名前": "ネタ帳を埋める",
       "ファイル": "neta-collect.yml",
       "有効": true,
       "最後の実行": {
-        "時刻": "2026-10-08 16:27 JST",
+        "時刻": "2026-10-08 17:01 JST",
         "結果": "success",
         "きっかけ": "workflow_dispatch",
-        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37743498674"
+        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37747063114"
       },
-      "最後の成功": "2026-10-08 16:27 JST",
+      "最後の成功": "2026-10-08 17:01 JST",
       "今日走ったか": true,
-      "24時間の実行": 1,
+      "24時間の実行": 5,
       "24時間の失敗": 0,
       "判定": "成功"
     },
@@ -179,14 +185,14 @@
       "ファイル": "odekake.yml",
       "有効": true,
       "最後の実行": {
-        "時刻": "2026-10-08 12:59 JST",
+        "時刻": "2026-10-08 17:06 JST",
         "結果": "success",
         "きっかけ": "push",
-        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37725324162"
+        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37747656177"
       },
-      "最後の成功": "2026-10-08 12:59 JST",
+      "最後の成功": "2026-10-08 17:06 JST",
       "今日走ったか": true,
-      "24時間の実行": 1,
+      "24時間の実行": 4,
       "24時間の失敗": 0,
       "判定": "成功"
     },
@@ -195,14 +201,14 @@
       "ファイル": "test.yml",
       "有効": true,
       "最後の実行": {
-        "時刻": "2026-10-08 12:59 JST",
+        "時刻": "2026-10-08 17:06 JST",
         "結果": "success",
         "きっかけ": "push",
-        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37725324156"
+        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37747656174"
       },
-      "最後の成功": "2026-10-08 12:59 JST",
+      "最後の成功": "2026-10-08 17:06 JST",
       "今日走ったか": true,
-      "24時間の実行": 1,
+      "24時間の実行": 11,
       "24時間の失敗": 0,
       "判定": "成功"
     },
@@ -227,14 +233,14 @@
       "ファイル": "threads-compose.yml",
       "有効": true,
       "最後の実行": {
-        "時刻": "2026-10-08 16:29 JST",
+        "時刻": "2026-10-08 17:07 JST",
         "結果": "success",
-        "きっかけ": "workflow_dispatch",
-        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37743761158"
+        "きっかけ": "repository_dispatch",
+        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37747783326"
       },
-      "最後の成功": "2026-10-08 16:29 JST",
+      "最後の成功": "2026-10-08 17:07 JST",
       "今日走ったか": true,
-      "24時間の実行": 1,
+      "24時間の実行": 2,
       "24時間の失敗": 0,
       "判定": "成功"
     },
@@ -242,7 +248,17 @@
       "名前": "Threads 予約投稿",
       "ファイル": "threads-post.yml",
       "有効": true,
-      "判定": "一度も走っていない"
+      "最後の実行": {
+        "時刻": "2026-10-08 17:05 JST",
+        "結果": "success",
+        "きっかけ": "repository_dispatch",
+        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37747566140"
+      },
+      "最後の成功": "2026-10-08 17:05 JST",
+      "今日走ったか": true,
+      "24時間の実行": 1,
+      "24時間の失敗": 0,
+      "判定": "成功"
     },
     {
       "名前": "Threads トークン更新",
@@ -261,16 +277,16 @@
       "ファイル": "pages-build-deployment",
       "有効": true,
       "最後の実行": {
-        "時刻": "2026-10-08 16:31 JST",
-        "結果": "in_progress",
+        "時刻": "2026-10-08 17:06 JST",
+        "結果": "success",
         "きっかけ": "dynamic",
-        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37744008841"
+        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37747677764"
       },
-      "最後の成功": "2026-10-08 16:29 JST",
+      "最後の成功": "2026-10-08 17:06 JST",
       "今日走ったか": true,
-      "24時間の実行": 8,
+      "24時間の実行": 36,
       "24時間の失敗": 0,
-      "判定": "実行中"
+      "判定": "成功"
     }
   ]
 }
