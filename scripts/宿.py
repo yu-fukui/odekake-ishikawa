@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import urllib.error
 import urllib.request
@@ -74,6 +75,9 @@ def 読む() -> list[dict]:
     """宿のリストを読む。手元に無ければ https で取りに行く。"""
     if 宿の置き場.exists():
         text = 宿の置き場.read_text(encoding="utf-8")
+    elif not 宿のURL:
+        print("::warning::宿のリスト（neta/宿.jsonl）がまだありません。今日は宿の紹介をしません。")
+        return []
     else:
         try:
             req = urllib.request.Request(宿のURL, headers={"User-Agent": "compose"})
@@ -238,6 +242,8 @@ def _行を読む(置き場: Path, url: str) -> list[dict]:
     """jsonl を手元か https から読む。# で始まる行は飛ばす。"""
     if 置き場.exists():
         text = 置き場.read_text(encoding="utf-8")
+    elif not url:
+        return []
     else:
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "compose"})
@@ -324,8 +330,8 @@ def 市町(宿: dict) -> str:
     「丹生郡越前町」のような郡つきは、町だけにする（読む人に要るのは町名）。
     """
     住 = str(宿.get("住所") or "")
-    m = re.search(r"福井県(?:[^\d０-９]*?郡)?([^\d０-９]+?[市町村])", 住)
-    return m.group(1) if m else str(宿.get("エリア") or "福井")
+    m = re.search(rf"{県}(?:[^\d０-９]*?郡)?([^\d０-９]+?[市町村])", 住)
+    return m.group(1) if m else str(宿.get("エリア") or 県名)
 
 
 # 宿名のうしろに付く運営会社の名前。一覧に並べると読みにくいので外す。
@@ -492,3 +498,35 @@ def 返信の行(まとめ: dict) -> list[str]:
         頭 += f"。{説}）" if 説 else "）"
         出.append(f"{頭}\n{宿のリンク先(宿, 短縮)}")
     return 出
+
+
+# ---------------------------------------------------------------
+# 別の県のおでかけ（石川版など）で使うとき（2026-10-08）
+# ---------------------------------------------------------------
+# リポジトリ直下の region.json の県が福井県でなければ、宿のリスト・短縮・クーポンは
+# 手元のファイルだけを読み（福井の X のリポジトリは読まない）、土地の切り口と絵文字は
+# region.json の「宿」から取る。region.json が無い（X・yu のリポジトリ）か福井県なら、何も変えない。
+県, 県名 = "福井県", "福井"
+
+
+def _県に合わせる() -> None:
+    global 県, 県名, 宿のURL, 短縮のURL, クーポンのURL, 切り口たち, エリアの絵文字
+    パス = Path(os.environ.get("REGION_FILE", "").strip() or Path(__file__).resolve().parent.parent / "region.json")
+    try:
+        地 = json.loads(パス.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    if 地.get("県", "福井県") == "福井県":
+        return
+    県, 県名 = 地["県"], 地.get("県名", 地["県"].rstrip("県"))
+    宿のURL = 短縮のURL = クーポンのURL = ""
+    宿の設定 = 地.get("宿", {})
+    if 宿の設定.get("土地の切り口"):
+        切り口たち = [c for c in 切り口たち if c.get("種類") != "エリア"] + [
+            {**c, "種類": "エリア"} for c in 宿の設定["土地の切り口"]
+        ]
+    if 宿の設定.get("絵文字"):
+        エリアの絵文字 = dict(宿の設定["絵文字"])
+
+
+_県に合わせる()
