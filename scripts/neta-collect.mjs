@@ -18,7 +18,7 @@
  * ------------------------------------------------------------------
  */
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, appendFileSync, mkdirSync } from 'node:fs';
 import { 巡回 } from './巡回.mjs';
 
 const 設定パス = 'neta/設定.json';
@@ -408,6 +408,7 @@ async function claudeに聞く(prompt) {
     `使った分: 入力 ${入力} tok ／ 出力 ${出力t} tok ／ Web検索 ${検索した} 回` +
       `（上限 ${設定.検索回数 ?? 8}）／ 概算 $${概算.toFixed(4)}`
   );
+  使用量を記録する(設定.モデル ?? 'claude-sonnet-5', 入力, 出力t, 検索した);
   if (data?.stop_reason === 'max_tokens') {
     console.log('::warning::max_tokens で切れました。設定.検索回数 を減らすか max_tokens を上げてください');
   }
@@ -415,6 +416,20 @@ async function claudeに聞く(prompt) {
     .filter((b) => b.type === 'text')
     .map((b) => b.text)
     .join('\n');
+}
+
+// AI を呼んだ量と概算の金額を state/usage.jsonl に1行残す（予算の見張り。scripts/使用量.py と同じ形）
+function 使用量を記録する(モデル, 入力, 出力, 検索) {
+  try {
+    const 単価 = [['fable', 10, 50], ['mythos', 10, 50], ['opus-5-5', 4, 20], ['opus', 5, 25], ['sonnet-4', 3, 15], ['sonnet', 2, 10], ['haiku-4', 1, 5], ['haiku', 0.1, 0.5]];
+    const [, 入, 出] = 単価.find(([名]) => String(モデル).includes(名)) ?? ['', 5, 25];
+    const ドル = Math.round(((入力 / 1e6) * 入 + (出力 / 1e6) * 出 + 検索 * 0.01) * 1e5) / 1e5;
+    const 時刻 = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 19) + '+09:00';
+    mkdirSync('state', { recursive: true });
+    appendFileSync('state/usage.jsonl', JSON.stringify({ 時刻, 何: '情報集め', モデル, 入力, 出力, 検索, ドル }) + '\n');
+  } catch (e) {
+    console.log(`::warning::使用量を記録できませんでした（${e.message}）`);
+  }
 }
 
 function 順に取る(候補たち, 上限) {

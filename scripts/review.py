@@ -460,6 +460,12 @@ def write_learning_text(summary: dict, decision: dict, history: list[dict]) -> s
         payload = anthropic_request(
             "/messages", {"model": model, "max_tokens": 600, "messages": [{"role": "user", "content": prompt}]}, api_key
         )
+        try:
+            sys.path.insert(0, str(Path(__file__).resolve().parent))
+            import 使用量
+            使用量.記録("日次レビュー", model, payload.get("usage") or {})
+        except Exception:  # noqa: BLE001
+            pass
         text = "".join(b.get("text", "") for b in payload.get("content", []) if b.get("type") == "text").strip()
         lines = [ln for ln in text.splitlines() if ln.strip().startswith("-")]
         return "\n".join(lines[:3]) if lines else "\n".join(fallback)

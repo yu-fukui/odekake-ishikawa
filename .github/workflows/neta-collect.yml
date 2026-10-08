@@ -115,3 +115,9 @@ jobs:
           # 宿のリストは X のリポジトリで更新されるので、毎朝ここで取り直す
           python3 scripts/おでかけ_宿.py --images
           ./scripts/commit_file.sh docs/hotels.json "chore(odekake): 宿のデータを更新"
+
+      - name: 使用量の記録をコミットする
+        if: ${{ always() }}
+        continue-on-error: true
+        run: |
+          ./scripts/commit_file.sh state/usage.jsonl "chore(usage): AI の使用量を記録"

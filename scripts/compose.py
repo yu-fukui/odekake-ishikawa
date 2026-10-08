@@ -34,6 +34,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import お得日
+import 使用量  # AI を呼ぶごとに使った量を記録する（予算の見張り）
 import 地域  # どの県のおでかけか（region.json）。福井版は今までと同じ
 import ふるさと納税
 import 宿
@@ -852,6 +853,7 @@ def ask(api_key: str, model: str, prompt: str) -> str:
             "messages": [{"role": "user", "content": prompt}],
         },
     )
+    使用量.記録("翌日ぶんの作成", model, payload.get("usage") or {})
     出 = "".join(
         block.get("text", "") for block in payload.get("content", []) if block.get("type") == "text"
     ).strip()
