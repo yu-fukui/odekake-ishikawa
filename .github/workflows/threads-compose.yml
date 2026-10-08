@@ -5,6 +5,9 @@ name: Threads 翌日ぶんを作成
 on:
   repository_dispatch:
     types: [threads-compose]
+  # 外部 cron が無いあいだの起動（20:00 JST。少し遅れることがある）
+  schedule:
+    - cron: "0 11 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
