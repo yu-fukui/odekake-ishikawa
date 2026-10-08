@@ -1593,6 +1593,18 @@ class 枠を落とす(Exception):
     """
 
 
+def 確かめる言葉(text: str, thread: list[str]) -> str | None:
+    """region.json の「能登の確認」に当たる言葉があれば返す。地名と言葉の両方が入っているときだけ。"""
+    設定 = 地域.地域.get("能登の確認")
+    if not 設定:
+        return None
+    全文 = "\n".join([text, *thread])
+    if not any(地 in 全文 for 地 in 設定.get("地名", [])):
+        return None
+    当たり = [w for w in 設定.get("言葉", []) if w in 全文]
+    return "・".join(当たり) or None
+
+
 def 落とす(わけ: str):
     raise 枠を落とす(わけ)
 
@@ -2007,6 +2019,11 @@ def main() -> None:
                 item["thread"] = thread
             if post.get("note"):
                 item["note"] = str(post["note"])[:120]
+            要確認 = 確かめる言葉(text, thread)
+            if 要確認:
+                # 消さずに印を付けて、運用の人に見てもらう（石川版の能登。福井版は設定が無いので何もしない）
+                item["note"] = (f"要確認（能登）：{要確認}／" + str(item.get("note") or ""))[:120]
+                print(f"::warning::{hour}:00 に能登の確認が要る言葉「{要確認}」があります。運用で見てください。")
             new_lines.append(json.dumps(item, ensure_ascii=False))
             print(f"\n=== {hour}:00 ({len(text)} 字) ===\n{text}")
             for index, part in enumerate(thread, start=2):

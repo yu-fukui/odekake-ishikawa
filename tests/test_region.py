@@ -77,6 +77,24 @@ class RegionTest(unittest.TestCase):
                 self.assertEqual(結果["残り"], [], "福井の言葉が指示文に残っている")
                 self.assertEqual(結果["15時"], f"{結果['県']}の話題紹介")
 
+    def test_noto_check_flags_only_with_place_and_word(self):
+        for 設定 in 県の設定たち():
+            地 = json.loads(設定.read_text(encoding="utf-8"))
+            if "能登の確認" not in 地:
+                continue
+            with self.subTest(設定=str(設定.relative_to(ROOT))):
+                env = {**os.environ, "REGION_FILE": str(設定)}
+                式 = (
+                    "import importlib.util,sys,json; sys.path.insert(0,'scripts');"
+                    "s=importlib.util.spec_from_file_location('c','scripts/compose.py');"
+                    "m=importlib.util.module_from_spec(s); s.loader.exec_module(m);"
+                    "print(json.dumps([m.確かめる言葉('輪島市の朝市が復興へ一歩',[]),"
+                    "m.確かめる言葉('輪島市の朝市が10月1日から開かれます',[]),"
+                    "m.確かめる言葉('金沢で地震の防災訓練',[])],ensure_ascii=False))"
+                )
+                出 = subprocess.run([sys.executable, "-c", 式], cwd=ROOT, env=env, capture_output=True, text=True, check=True)
+                self.assertEqual(json.loads(出.stdout.strip().splitlines()[-1]), ["復興", None, None])
+
     def test_copy_site_has_no_fukui_words(self):
         if not (ROOT / "regions").exists():
             self.skipTest("写しの元（福井版）ではない")
