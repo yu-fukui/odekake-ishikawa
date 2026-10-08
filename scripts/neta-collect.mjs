@@ -522,9 +522,20 @@ function 見出しの下に入れる(md, 見出し文字, 塊) {
 }
 
 function 整形(s) {
-  const t = String(s ?? '').replace(/\r/g, '').trim();
+  const t = 引用の印を取る(String(s ?? '')).replace(/\r/g, '').trim();
   if (!t) return '';
   return t.startsWith('- ') ? t : `- ${印を取る(t)}`;
+}
+
+// Web検索の引用の印（<cite index="61-3">…</cite>）が行に混ざることがある（2026-10-08 石川版）。
+// 「(cite index=…>」のように頭の < が欠けた形もあったので、それも外す。
+export function 引用の印を取る(s) {
+  return String(s)
+    .replace(/<\/\s*cite\s*>/gi, '')
+    .replace(/&lt;\/\s*cite\s*&gt;/gi, '')
+    .replace(/&lt;cite\s+index\s*=\s*"[^"]*"\s*&gt;/gi, '')
+    .replace(/[(<（]?\s*cite\s+index\s*=\s*"[^"]*"\s*(?:>|&gt;)/gi, '')
+    .replace(/[ \t]{2,}/g, ' ');
 }
 
 function 印を取る(s) {
