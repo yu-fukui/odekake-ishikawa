@@ -75,7 +75,9 @@ class RegionTest(unittest.TestCase):
                 結果 = json.loads(出.stdout.strip().splitlines()[-1])
                 self.assertEqual(結果["当たらない"], [], "言いかえの元の文が、指示文に見つからない")
                 self.assertEqual(結果["残り"], [], "福井の言葉が指示文に残っている")
-                self.assertEqual(結果["15時"], f"{結果['県']}の話題紹介")
+                地 = json.loads(設定.read_text(encoding="utf-8"))
+                PRあり = 地.get("使う", {}).get("宿", True) or 地.get("使う", {}).get("ふるさと納税", True)
+                self.assertEqual(結果["15時"], "楽天トラベルの紹介（PR）" if PRあり else f"{結果['県']}の話題紹介")
 
     def test_noto_check_flags_only_with_place_and_word(self):
         for 設定 in 県の設定たち():
