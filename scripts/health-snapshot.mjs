@@ -158,6 +158,18 @@ if (SKIP_API) {
 } else {
   try {
     snapshot.ワークフロー = await workflows();
+    // 毎日走るはずのもの（2026-10-08：情報集めの起動を cron-job.org だけにしたので、止まった日に気づけるように）
+    const 毎日 = { "neta-collect.yml": "朝の情報集め", "threads-compose.yml": "翌日ぶんの作成" };
+    const 警告 = [];
+    for (const w of snapshot.ワークフロー) {
+      if (毎日[w.ファイル] && w.今日走ったか !== true) 警告.push(`${毎日[w.ファイル]}（${w.ファイル}）が今日まだ走っていません。cron-job.org の起動を確かめてください`);
+      if (w.ファイル === "threads-post.yml" && (w["24時間の実行"] ?? 0) === 0) 警告.push("予約投稿（threads-post.yml）が24時間走っていません。cron-job.org の起動を確かめてください");
+    }
+    if (警告.length) {
+      snapshot.状態 = "要確認";
+      snapshot.警告 = 警告;
+      for (const m of 警告) console.log(`::warning::${m}`);
+    }
   } catch (e) {
     snapshot.状態 = "一部失敗";
     snapshot.ワークフロー = { 説明: `一覧を取れませんでした（${e.message}）` };
