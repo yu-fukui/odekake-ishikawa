@@ -378,7 +378,8 @@ async function claudeに聞く(prompt) {
       },
       body: JSON.stringify({
         model: 設定.モデル ?? 'claude-sonnet-5',
-        max_tokens: 8000,
+        // 候補が多い日は 8000 では返しの JSON の途中で切れた（2026-10-08 石川版、候補130件）
+        max_tokens: 16000,
         tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 設定.検索回数 ?? 8 }],
         messages
       })
@@ -418,8 +419,45 @@ function JSONを取り出す(text) {
   try {
     return JSON.parse(素);
   } catch {
+    // 途中で切れたとき（max_tokens）は、items の中で閉じている {…} だけを拾う（2026-10-08）
+    const 拾った = 途中までのitems(text);
+    if (拾った.length) {
+      console.log(`::warning::返しの JSON が途中で切れていました。閉じている ${拾った.length} 件だけを使います`);
+      return { items: 拾った, 調べて分かったもの: [] };
+    }
     return null;
   }
+}
+
+export function 途中までのitems(text) {
+  const i = text.indexOf('"items"');
+  if (i === -1) return [];
+  const 始 = text.indexOf('[', i);
+  if (始 === -1) return [];
+  const 出 = [];
+  let 深さ = 0, 頭 = -1, 文字列 = false, 逃がし = false;
+  for (let k = 始 + 1; k < text.length; k++) {
+    const c = text[k];
+    if (文字列) {
+      if (逃がし) 逃がし = false;
+      else if (c === '\\') 逃がし = true;
+      else if (c === '"') 文字列 = false;
+      continue;
+    }
+    if (c === '"') { 文字列 = true; continue; }
+    if (c === '{') { if (深さ === 0) 頭 = k; 深さ++; }
+    else if (c === '}') {
+      深さ--;
+      if (深さ === 0 && 頭 !== -1) {
+        try {
+          const o = JSON.parse(text.slice(頭, k + 1));
+          if (o && typeof o.line === 'string') 出.push(o);
+        } catch { /* 壊れたものは捨てる */ }
+        頭 = -1;
+      }
+    } else if (c === ']' && 深さ === 0) break;
+  }
+  return 出;
 }
 
 function 節を取り出す(md, 見出し文字) {
