@@ -3,7 +3,7 @@ name: ネタ帳を埋める
 # neta/設定.json の「通す質問」で Web 検索し、出典URLの辿れる出来事だけを
 # neta/ネタ帳.md の「書き足す場所」の下に追記してコミットする。
 #
-# 毎朝 7:00 (JST) に外部 cron（cron-job.org）から neta-collect で起動する。
+# 毎朝 7:00 (JST) に外部 cron（cron-job.org）から neta-collect で起動する（集めるのは月曜と木曜だけ）。
 # 手で回したいときは Actions タブ → このワークフロー → Run workflow。
 on:
   # 外部 cron（cron-job.org）から叩く入口。
@@ -32,7 +32,29 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # 2026-10-08 代表指示「情報収集は、月曜と木曜の週2回にします。」
+  # cron-job.org からは毎朝起動されるが、集めるのは日本時間の月曜と木曜だけ。
+  # 手で回したとき（workflow_dispatch）は曜日にかかわらず集める。
+  # 起動そのものは毎日あるので、状態まとめの「今日走ったか」は毎日の見張りに使える。
+  day:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.day.outputs.run }}
+    steps:
+      - name: 集める日か（月・木）
+        id: day
+        run: |
+          dow=$(TZ=Asia/Tokyo date +%u)   # 1=月 … 7=日
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ "$dow" = "1" ] || [ "$dow" = "4" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "今日（曜日番号 ${dow}）は集めない日です。集めるのは月曜と木曜だけ。"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
   collect:
+    needs: day
+    if: needs.day.outputs.run == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
