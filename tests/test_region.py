@@ -114,6 +114,34 @@ class RegionTest(unittest.TestCase):
                 self.assertFalse((Path(先) / "neta" / "ふるさと納税_リンク.jsonl").exists())
                 self.assertTrue((Path(先) / "neta" / "ネタ帳.md").exists())
 
+    def test_furusato_never_uses_fukui_list_elsewhere(self):
+        """福井以外の県で、福井の返礼品リスト・切り口・見出しの例を使わない。"""
+        式 = r"""
+import importlib.util, json, sys
+from datetime import date
+sys.path.insert(0, "scripts")
+import ふるさと納税 as f
+s = importlib.util.spec_from_file_location("c", "scripts/compose.py")
+m = importlib.util.module_from_spec(s); s.loader.exec_module(m)
+名 = [c["名"] for c in f.切り口たち]
+決まり = "\n".join(m.寄付の決まり({"name": "x", "件数": 5, "フック": ""}))
+print(json.dumps({"URL": f.リストのURL, "切り口": 名, "決まり": 決まり, "県": f.県名}, ensure_ascii=False))
+"""
+        for 設定 in 県の設定たち():
+            地 = json.loads(設定.read_text(encoding="utf-8"))
+            if 地["県名"] == "福井":
+                continue
+            with self.subTest(設定=str(設定.relative_to(ROOT))):
+                env = {**os.environ, "REGION_FILE": str(設定)}
+                出 = subprocess.run([sys.executable, "-c", 式], cwd=ROOT, env=env, capture_output=True, text=True, check=True)
+                結果 = json.loads(出.stdout.strip().splitlines()[-1])
+                self.assertNotIn("x-yu__fukui-bot", 結果["URL"])
+                self.assertNotIn("越前がに", 結果["切り口"])
+                self.assertEqual(結果["県"], 地["県名"])
+                import re
+                self.assertEqual(re.findall(福井の言葉, 結果["決まり"]), [], "寄付の決まりに福井の言葉が残っている")
+                self.assertIn(地["見出しの頭"], 結果["決まり"])
+
 
 class HolidayTest(unittest.TestCase):
     def test_holiday_and_long_weekend(self):

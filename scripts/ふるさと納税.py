@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import urllib.error
 import urllib.request
@@ -33,6 +34,7 @@ from pathlib import Path
     "neta/%E3%81%B5%E3%82%8B%E3%81%95%E3%81%A8%E7%B4%8D%E7%A8%8E.jsonl"
 )
 起点 = date(2026, 1, 1)
+県名 = "福井"
 
 # 自治体ごとの絵文字。土地の目印にする（宿と同じ考え方）。
 自治体の絵文字 = {
@@ -83,9 +85,39 @@ from pathlib import Path
      "フック": "福井は三方五湖のまわりで梅が、山あいで里芋が育つ土地です。"},
 ]
 
+def _県に合わせる() -> None:
+    """福井以外の県では、region.json の「ふるさと納税」から切り口と絵文字を読む。
+
+    福井の値は上に書いたまま（福井版の region.json には「ふるさと納税」を書かない）。
+    別の県では、福井の切り口（越前がに・若狭牛…）と福井の返礼品リストを
+    **決して使わない**。その県の切り口が無ければ、ふるさと納税の枠は立たない
+    （compose.py が宿に戻す）。返礼品リストはその県のリポジトリの
+    neta/ふるさと納税.jsonl だけを読む（furusato-collect.yml が作る）。
+    """
+    global リストのURL, 切り口たち, 自治体の絵文字, 県名
+    パス = Path(os.environ.get("REGION_FILE", "").strip() or Path(__file__).resolve().parent.parent / "region.json")
+    try:
+        地 = json.loads(パス.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    if 地.get("県", "福井県") == "福井県":
+        return
+    県名 = 地.get("県名", 地["県"].rstrip("県"))
+    設定 = 地.get("ふるさと納税", {})
+    リストのURL = 設定.get("リストのURL", "")
+    切り口たち = list(設定.get("切り口たち", []))
+    自治体の絵文字 = dict(設定.get("自治体の絵文字", {}))
+
+
+_県に合わせる()
+
+
 def _行を読む() -> list[dict]:
     if 置き場.exists():
         text = 置き場.read_text(encoding="utf-8")
+    elif not リストのURL:
+        print(f"::warning::{置き場} がありません。今日はふるさと納税を紹介しません。")
+        return []
     else:
         try:
             req = urllib.request.Request(リストのURL, headers={"User-Agent": "compose"})
@@ -268,7 +300,7 @@ def 一覧の行(まとめ: dict) -> list[str]:
     上限 = 名前の予算.get(len(品たち), 44)
     出 = []
     for i, p in enumerate(品たち):
-        市 = str(p.get("自治体") or "福井")
+        市 = str(p.get("自治体") or 県名)
         絵 = 自治体の絵文字.get(市, "📍")
         出.append(f"{丸数字[i]} {絵} {見せる名(p, 上限)}（{市}）")
     return 出
@@ -278,7 +310,7 @@ def 返信の行(まとめ: dict) -> list[str]:
     """返信に並べる、返礼品ごとの一行とリンク。1件で1つ。"""
     出 = []
     for i, p in enumerate(まとめ["品"]):
-        市 = str(p.get("自治体") or "福井")
+        市 = str(p.get("自治体") or 県名)
         額 = f"寄付{int(p['寄付額']):,}円" if p.get("寄付額") else ""
         件 = f"レビュー{p['レビュー数']}件" if p.get("レビュー数") else ""
         かけら = [x for x in (市, 額, 件) if x]
