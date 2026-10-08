@@ -115,5 +115,17 @@ class RegionTest(unittest.TestCase):
                 self.assertTrue((Path(先) / "neta" / "ネタ帳.md").exists())
 
 
+class HolidayTest(unittest.TestCase):
+    def test_holiday_and_long_weekend(self):
+        import sys
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import 祝日
+        from datetime import date
+        self.assertEqual(祝日.説明(date(2026, 10, 12)), "10/12（月）はスポーツの日（祝日）です。10/10〜10/12 は3連休の3日目です（最終日）。")
+        self.assertEqual(祝日.説明(date(2026, 10, 9)), "明日 10/10 から3連休です（〜10/12）。")
+        self.assertEqual(祝日.説明(date(2026, 10, 13)), "")
+        self.assertEqual(祝日.説明(date(2026, 10, 17)), "")  # ふつうの土曜は連休ではない
+
+
 if __name__ == "__main__":
     unittest.main()

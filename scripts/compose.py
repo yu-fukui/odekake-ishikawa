@@ -34,6 +34,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import お得日
+import 祝日  # 祝日と連休（翌日ぶんの指示に入れる）
 import 使用量  # AI を呼ぶごとに使った量を記録する（予算の見張り）
 import 地域  # どの県のおでかけか（region.json）。福井版は今までと同じ
 import ふるさと納税
@@ -414,6 +415,14 @@ def build_prompt(board: str, neta: str, articles: str, works: str, recent: str, 
         ),
         "材料として日々URALA などのメディア記事を使いますが、自分が取材したようには書かず、出典を付けます。",
         f"{target_date.isoformat()}（{weekday}）の {hours} に投稿する {len(needed)} 本を書いてください。",
+        *(
+            [
+                f"**休みの日について：{祝日.説明(target_date)}**",
+                "祝日・連休に触れるときは、この一文の範囲で書いてください。連休でない日を「連休」と書かないこと。",
+            ]
+            if 祝日.説明(target_date)
+            else []
+        ),
         "",
         "## 枠と役割",
         slot_lines,
@@ -1718,6 +1727,11 @@ def main() -> None:
     print("これから作る枠: " + "、".join(f"{h}:00" for h, *_ in needed))
 
     board = fetch_doc(os.environ.get("BOARD_DOC_ID", "").strip(), "運用ボード")
+    # Google ドキュメントの運用ボードが無いリポジトリ（石川版など）は、neta/運用ボード.md を読む。
+    # 運用部が一時的な指示（連休の言い回し、しばらく扱わない話題など）をここに書く（2026-10-09）
+    if not board and Path("neta/運用ボード.md").exists():
+        board = Path("neta/運用ボード.md").read_text(encoding="utf-8")
+        print(f"運用ボード: neta/運用ボード.md から {len(board)} 文字を読み込みました。")
     neta = read_neta()
     articles = fetch_urala_articles() if 地域.使う("URALA") else ""
     works = fetch_urala_design_works() if 地域.使う("URALA") else ""
