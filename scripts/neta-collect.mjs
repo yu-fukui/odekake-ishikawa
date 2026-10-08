@@ -83,9 +83,13 @@ if (existsSync(巡回先パス)) {
   const 使い済みURL = new Set([...ネタ帳.matchAll(/https?:\/\/[^\s)）]+/g)].map((m) => m[0].replace(/[.,、。]+$/, '')));
   // 出典を一覧ページに固定した先（ふーぽ新店速報など）は、全部が同じURLになる。
   // URL で落とすと2回目以降まるごと消えるので、対象から外す。重複は行の文面で弾く。
-  const 残り = 候補.filter((c) => c.出典固定 || !使い済みURL.has(c.url));
+  const 新しい = 候補.filter((c) => c.出典固定 || !使い済みURL.has(c.url));
+  // 多すぎると AI の返しが途中で切れる（2026-10-08 石川版で130件）。上限を決めて、
+  // 巡回先ごとに1件ずつ順に取って（新しい順）、どの巡回先も落とさないようにする。
+  const 渡す上限 = 巡回先['AIに渡す最大件数'] ?? 80;
+  const 残り = 順に取る(新しい, 渡す上限);
   候補件数 = 残り.length;
-  console.log(`候補: ${候補.length}件 → ネタ帳に無いもの ${残り.length}件`);
+  console.log(`候補: ${候補.length}件 → ネタ帳に無いもの ${新しい.length}件 → AI に渡す ${残り.length}件（上限 ${渡す上限}）`);
 
   候補一覧 = 残り.length
     ? 残り.map((c) => `- [${c.名前}]${c.日付 ? ` ${c.日付}` : ''} ${c.タイトル}\n  ${c.url}`).join('\n')
@@ -411,6 +415,25 @@ async function claudeに聞く(prompt) {
     .filter((b) => b.type === 'text')
     .map((b) => b.text)
     .join('\n');
+}
+
+function 順に取る(候補たち, 上限) {
+  if (候補たち.length <= 上限) return 候補たち;
+  const 先ごと = new Map();
+  for (const c of 候補たち) {
+    if (!先ごと.has(c.名前)) 先ごと.set(c.名前, []);
+    先ごと.get(c.名前).push(c);
+  }
+  const 列 = [...先ごと.values()];
+  const 出 = [];
+  for (let i = 0; 出.length < 上限; i++) {
+    let 足した = false;
+    for (const l of 列) {
+      if (i < l.length && 出.length < 上限) { 出.push(l[i]); 足した = true; }
+    }
+    if (!足した) break;
+  }
+  return 出;
 }
 
 function JSONを取り出す(text) {
