@@ -140,7 +140,7 @@ print(json.dumps({"URL": f.リストのURL, "切り口": 名, "決まり": 決�
                 self.assertEqual(結果["県"], 地["県名"])
                 import re
                 self.assertEqual(re.findall(福井の言葉, 結果["決まり"]), [], "寄付の決まりに福井の言葉が残っている")
-                self.assertIn(地["見出しの頭"], 結果["決まり"])
+                self.assertIn(地["県名"], 結果["決まり"])
 
     def test_furusato_noto_rules(self):
         """石川：切り口は上から順、札は写さない、能登だけの日も立つ（2026-10-09 代表）、1/1・9/21の前後は能登の切り口を使わない。"""
@@ -178,7 +178,7 @@ print(json.dumps(出, ensure_ascii=False))
         self.assertEqual(結果["切り口"], ["加能ガニ", "能登の海と浜のもの", "香箱ガニ"])
 
     def test_furusato_weights_and_day_count(self):
-        """石川：重み2の切り口は倍の回数。ふるさと納税の日の数え方は compose.宿の型 と同じ。"""
+        """石川：重み2の切り口は倍の回数。ふるさと納税は毎日（日ごとに1つ進む）。"""
         設定 = ROOT / "regions" / "ishikawa" / "region.json"
         if not 設定.exists():
             self.skipTest("福井版のリポジトリでだけ見る")
@@ -191,7 +191,7 @@ def 品(i, 名, 市):
     return {"itemCode": str(i), "名": 名, "生の名": 名, "url": "u", "自治体": 市}
 た = [品(1, "能登牛 500g", "珠洲市"), 品(2, "九谷焼 皿", "能美市"), 品(3, "加賀野菜 セット", "金沢市")]
 日 = [date(2026, 10, 1) + timedelta(i) for i in range(60)]
-ふ = [d for d in 日 if compose.宿の型(d) == "ふるさと納税"]
+ふ = 日  # 2026-10-09 から毎日
 合う = all(f._ふるさと納税の日の番号(d + timedelta(1)) - f._ふるさと納税の日の番号(d) == 1 for d in ふ)
 名 = [f.今日のまとめ(d, た)["切り口"]["名"] for d in ふ[:12]]
 print(json.dumps({"合う": 合う, "名": 名}, ensure_ascii=False))
