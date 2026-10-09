@@ -25,7 +25,7 @@ import os
 import re
 import urllib.error
 import urllib.request
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 置き場 = Path("neta/ふるさと納税.jsonl")
@@ -40,6 +40,8 @@ from pathlib import Path
 名で外す語 = ""                  # 表示用の「名」にこの語がある品は紹介しない（正規表現）
 写さない札 = ""                  # 楽天の元の商品名から落とす札（正規表現。投稿・返信に写さない）
 混ぜる地区 = ""                  # この地区の品だけで並べる日を作らない（石川は「能登」）
+最低件数 = 3                     # 切り口が立つ件数。石川は 1（2026-10-09 代表「3品が理想ですが、1品でもOK」）
+ふるさと納税の日で数える = False  # 切り口を「ふるさと納税の日」の通し番号で回す（切り口の「重み」を使う県）
 
 # 自治体ごとの絵文字。土地の目印にする（宿と同じ考え方）。
 自治体の絵文字 = {
@@ -100,6 +102,7 @@ def _県に合わせる() -> None:
     neta/ふるさと納税.jsonl だけを読む（furusato-collect.yml が作る）。
     """
     global リストのURL, 切り口たち, 自治体の絵文字, 県名, 先に当たった切り口だけ, 名で外す語, 写さない札, 混ぜる地区
+    global 最低件数, ふるさと納税の日で数える
     パス = Path(os.environ.get("REGION_FILE", "").strip() or Path(__file__).resolve().parent.parent / "region.json")
     try:
         地 = json.loads(パス.read_text(encoding="utf-8"))
@@ -116,6 +119,8 @@ def _県に合わせる() -> None:
     名で外す語 = 設定.get("名で外す語", "")
     写さない札 = 設定.get("写さない札", "")
     混ぜる地区 = 設定.get("混ぜる地区", "")
+    最低件数 = max(1, int(設定.get("最低件数", 3)))
+    ふるさと納税の日で数える = bool(設定.get("ふるさと納税の日で数える"))
 
 
 _県に合わせる()
@@ -350,7 +355,8 @@ def 今日のまとめ(対象日: date, 品たち: list[dict] | None = None,
     # 3件そろえば切り口として出す。4件だと「越前がに」のような
     # 福井ならではの切り口が立たない日が出る（2026-09-25）。
     # 切り口が立つ線は3件で固定（見せる件数に連動させない。宿と同じ理由）
-    最低 = 3
+    # 石川は region.json の「最低件数」で 1 にしている（2026-10-09 代表）
+    最低 = 最低件数
 
     # **飛ばし方に注意。** 使えない切り口に当たった日に次の番号へ進むと、
     # その番号は翌日ぶんでもあるので、2日続けて同じ切り口になる
@@ -370,9 +376,11 @@ def 今日のまとめ(対象日: date, 品たち: list[dict] | None = None,
             使える.append((き, 合う))
     if not 使える:
         return None
+    使える = _重みで並べる(使える)
+    番 = _ふるさと納税の日の番号(対象日) if ふるさと納税の日で数える else 日数
 
     for _ in (0,):
-        き, 合う = 使える[日数 % len(使える)]
+        き, 合う = 使える[番 % len(使える)]
         ずらし = 日数 % len(合う)
         並べ直し = 合う[ずらし:] + 合う[:ずらし]
         # 自治体がばらけるように、まず違う自治体から1件ずつ
@@ -394,6 +402,29 @@ def 今日のまとめ(対象日: date, 品たち: list[dict] | None = None,
             選ぶ[-1] = ほか
         return {"切り口": き, "品": 選ぶ}
     return None
+
+
+def _重みで並べる(使える: list) -> list:
+    """切り口の「重み」（既定 1）の回数だけ並べる。同じ切り口が続かないよう、
+    重み2なら半周ずつ離して置く（石川：カニ・能登の品・能登牛を多めに。2026-10-09 代表）。"""
+    n = len(使える)
+    置き = []
+    for j, x in enumerate(使える):
+        w = max(1, int(x[0].get("重み", 1)))
+        置き += [((k + j / n) / w, j, x) for k in range(w)]
+    return [x for *_, x in sorted(置き, key=lambda t: (t[0], t[1]))]
+
+
+def _ふるさと納税の日の番号(対象日: date) -> int:
+    """起点から対象日までの「ふるさと納税の日」の数。
+    15時の枠は宿と1日おき（compose.宿の型 と同じ数え方：5と0のつく日を除いた月内の通し番号が奇数の日）。
+    日付の数で回すと1日おきにしか当たらず、切り口が偶数個だと半分が出ない。"""
+    def ふるさと納税の日か(d: date) -> bool:
+        if d.day in (5, 10, 15, 20, 25, 30):
+            return False
+        n = sum(1 for x in range(1, d.day + 1) if x not in (5, 10, 15, 20, 25, 30))
+        return n % 2 == 1
+    return sum(1 for i in range((対象日 - 起点).days) if ふるさと納税の日か(起点 + timedelta(days=i)))
 
 
 def 一覧の行(まとめ: dict) -> list[str]:

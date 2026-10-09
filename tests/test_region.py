@@ -143,7 +143,7 @@ print(json.dumps({"URL": f.リストのURL, "切り口": 名, "決まり": 決�
                 self.assertIn(地["見出しの頭"], 結果["決まり"])
 
     def test_furusato_noto_rules(self):
-        """石川：切り口は上から順、札は写さない、能登だけの日を作らない、1/1・9/21の前後は能登の切り口を使わない。"""
+        """石川：切り口は上から順、札は写さない、能登だけの日も立つ（2026-10-09 代表）、1/1・9/21の前後は能登の切り口を使わない。"""
         設定 = ROOT / "regions" / "ishikawa" / "region.json"
         if not 設定.exists():
             設定 = ROOT / "region.json"
@@ -173,9 +173,38 @@ print(json.dumps(出, ensure_ascii=False))
         self.assertEqual(結果["香箱"], "香箱ガニ")
         self.assertEqual(結果["加能"], ["2", "3", "4"])
         self.assertEqual(結果["札"], "能登の干物")
-        # 能登の品しか無い「能登の海と浜のもの」は立たない
-        self.assertEqual(結果["切り口"], ["加能ガニ"])
-        self.assertIn("金沢市", 結果["地区"])
+        # 能登の品しか無い「能登の海と浜のもの」も立つ（2026-10-09 代表「能登の品だけで1日の投稿を作ってOK」）
+        # 1件でも立つ（2026-10-09 代表「1品でもOK」）ので、1件の香箱ガニも立つ
+        self.assertEqual(結果["切り口"], ["加能ガニ", "能登の海と浜のもの", "香箱ガニ"])
+
+    def test_furusato_weights_and_day_count(self):
+        """石川：重み2の切り口は倍の回数。ふるさと納税の日の数え方は compose.宿の型 と同じ。"""
+        設定 = ROOT / "regions" / "ishikawa" / "region.json"
+        if not 設定.exists():
+            self.skipTest("福井版のリポジトリでだけ見る")
+        式 = r"""
+import json, sys
+from datetime import date, timedelta
+sys.path.insert(0, "scripts"); sys.path.insert(0, "src")
+import ふるさと納税 as f, compose
+def 品(i, 名, 市):
+    return {"itemCode": str(i), "名": 名, "生の名": 名, "url": "u", "自治体": 市}
+た = [品(1, "能登牛 500g", "珠洲市"), 品(2, "九谷焼 皿", "能美市"), 品(3, "加賀野菜 セット", "金沢市")]
+日 = [date(2026, 10, 1) + timedelta(i) for i in range(60)]
+ふ = [d for d in 日 if compose.宿の型(d) == "ふるさと納税"]
+合う = all(f._ふるさと納税の日の番号(d + timedelta(1)) - f._ふるさと納税の日の番号(d) == 1 for d in ふ)
+名 = [f.今日のまとめ(d, た)["切り口"]["名"] for d in ふ[:12]]
+print(json.dumps({"合う": 合う, "名": 名}, ensure_ascii=False))
+"""
+        env = {**os.environ, "REGION_FILE": str(設定)}
+        出 = subprocess.run([sys.executable, "-c", 式], cwd=ROOT, env=env, capture_output=True, text=True, check=True)
+        結果 = json.loads(出.stdout.strip().splitlines()[-1])
+        self.assertTrue(結果["合う"])
+        名 = 結果["名"]
+        self.assertEqual(名.count("能登牛"), 6)
+        self.assertEqual(名.count("石川の職人の器"), 3)
+        self.assertEqual(名.count("加賀野菜"), 3)
+        self.assertTrue(all(a != b for a, b in zip(名, 名[1:])))
 
     def test_furusato_avoid_days(self):
         設定 = ROOT / "regions" / "ishikawa" / "region.json"
