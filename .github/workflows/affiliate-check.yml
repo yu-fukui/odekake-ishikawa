@@ -1,0 +1,35 @@
+name: アフィリエイト投稿の検証
+
+# 代表 10/9「アフィリエイト投稿を分析して、PDCAを回すサイクルを構築して」。
+# 楽天トラベル・ふるさと納税の投稿の閲覧とリンクのクリックを集め、insights/アフィリの成績.md と
+# insights/アフィリの学び.json（翌日ぶんの compose が読む）を書く。毎日 19:30 JST（20:00 の compose より前）。
+on:
+  schedule:
+    - cron: "30 10 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: threads-post
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 集める
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+        run: python "scripts/アフィリの検証.py" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: コミットする
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          ./scripts/commit_file.sh "insights/アフィリの成績.md" "chore(affi): アフィリエイト投稿の成績を更新"
+          ./scripts/commit_file.sh "insights/アフィリの学び.json" "chore(affi): アフィリエイトの学びを更新"
+          ./scripts/commit_file.sh "insights/アフィリのクリック.jsonl" "chore(affi): リンクのクリックを記録"
