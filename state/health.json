@@ -1,6 +1,6 @@
 {
   "リポジトリ": "yu-fukui/odekake-ishikawa",
-  "作成時刻": "2026-10-10 02:24 JST",
+  "作成時刻": "2026-10-10 02:30 JST",
   "今日": "2026-10-10",
   "状態": "要確認",
   "明日のキュー": {
@@ -160,7 +160,7 @@
       },
       "最後の成功": "2026-10-10 02:07 JST",
       "今日走ったか": true,
-      "24時間の実行": 2,
+      "24時間の実行": 1,
       "24時間の失敗": 0,
       "判定": "成功"
     },
@@ -185,14 +185,14 @@
       "ファイル": "health-snapshot.yml",
       "有効": true,
       "最後の実行": {
-        "時刻": "2026-10-10 02:24 JST",
+        "時刻": "2026-10-10 02:30 JST",
         "結果": "in_progress",
-        "きっかけ": "workflow_run",
-        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37966059505"
+        "きっかけ": "schedule",
+        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37966744569"
       },
-      "最後の成功": "2026-10-09 20:00 JST",
+      "最後の成功": "2026-10-10 02:24 JST",
       "今日走ったか": true,
-      "24時間の実行": 4,
+      "24時間の実行": 5,
       "24時間の失敗": 0,
       "判定": "実行中"
     },
@@ -309,12 +309,12 @@
       "ファイル": "threads-post.yml",
       "有効": true,
       "最後の実行": {
-        "時刻": "2026-10-10 02:20 JST",
+        "時刻": "2026-10-10 02:30 JST",
         "結果": "success",
         "きっかけ": "repository_dispatch",
-        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37965541658"
+        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37966749021"
       },
-      "最後の成功": "2026-10-10 02:20 JST",
+      "最後の成功": "2026-10-10 02:30 JST",
       "今日走ったか": true,
       "24時間の実行": 100,
       "24時間の失敗": 0,
@@ -347,16 +347,16 @@
       "ファイル": "pages-build-deployment",
       "有効": true,
       "最後の実行": {
-        "時刻": "2026-10-10 02:24 JST",
-        "結果": "in_progress",
+        "時刻": "2026-10-10 02:25 JST",
+        "結果": "success",
         "きっかけ": "dynamic",
-        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37966048992"
+        "URL": "https://github.com/yu-fukui/odekake-ishikawa/actions/runs/37966107261"
       },
-      "最後の成功": "2026-10-10 02:07 JST",
+      "最後の成功": "2026-10-10 02:25 JST",
       "今日走ったか": true,
       "24時間の実行": 45,
       "24時間の失敗": 0,
-      "判定": "実行中"
+      "判定": "成功"
     }
   ],
   "警告": [
