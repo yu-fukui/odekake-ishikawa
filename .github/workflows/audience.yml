@@ -1,0 +1,28 @@
+name: 利用者層を取る
+
+# 代表 10/9「アプリで見れる利用者層データがほしい」。フォロワーの年代・性別・国・市区町村を取り、
+# insights/利用者層/ に残す。毎週月曜 9:00 JST と、手で起動したとき。
+on:
+  schedule:
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+jobs:
+  audience:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 取る
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+        run: python "scripts/利用者層.py" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: コミットする
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          ./scripts/commit_file.sh insights/利用者層 "chore(insights): 利用者層を更新"
