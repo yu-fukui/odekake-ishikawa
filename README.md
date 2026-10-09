@@ -26,7 +26,7 @@
 
 ## 1. Web アプリで予約する
 
-`https://yu-fukui.github.io/odekake-ishikawa/yoyaku/`（独自ドメインにする前は `https://<owner>.github.io/<repo>/yoyaku/`）
+`https://ishikawa-odekake.fukui-fukui.com/yoyaku/`（独自ドメインにする前は `https://<owner>.github.io/<repo>/yoyaku/`）
 
 本文を書いて日時を選び、「キューに入れる」を押すと `posts/queue.jsonl` が更新されます。
 スマホからも使えます。できることは次のとおりです。
@@ -314,7 +314,7 @@ pyproject.toml                 パッケージ定義（`pip install -e .` 用。
 
 ## おでかけサイト（いしかわおでかけ）
 
-`https://yu-fukui.github.io/odekake-ishikawa/`（グルメサイト `ekimae.fukui-fukui.com` とそろえたサブドメイン。
+`https://ishikawa-odekake.fukui-fukui.com/`（グルメサイト `ekimae.fukui-fukui.com` とそろえたサブドメイン。
 前の `/odekake/` の URL はトップへ転送する）
 
 ネタ帳（`neta/ネタ帳.md`）に集まった福井のイベント・新スポットを、見る人向けに

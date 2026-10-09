@@ -21,4 +21,4 @@ User-agent: ImagesiftBot
 User-agent: PanguBot
 Disallow: /
 
-Sitemap: https://yu-fukui.github.io/odekake-ishikawa/sitemap.xml
+Sitemap: https://ishikawa-odekake.fukui-fukui.com/sitemap.xml
