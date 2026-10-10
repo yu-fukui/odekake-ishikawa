@@ -37,8 +37,7 @@ jobs:
       ONLY_HOURS: ${{ github.event.client_payload.only_hours }}
       # SHIFT_HOURS="6=7" で、6:00 の枠の中身を 7:00 に出す（当日の作り直し用）
       SHIFT_HOURS: ${{ github.event.client_payload.shift_hours }}
-      # 仕事ごとに API キーを分けて、費用を見分ける（2026-10-10 代表）。ANTHROPIC_API_KEY_COMPOSE が無ければ共通のキー
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_COMPOSE || secrets.ANTHROPIC_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       # ドキュメント ID は秘密ではないので Variables に置く
       BOARD_DOC_ID: ${{ vars.BOARD_DOC_ID }}
       NETA_DOC_ID: ${{ vars.NETA_DOC_ID }}

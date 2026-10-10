@@ -35,8 +35,7 @@ jobs:
       # 同じ日の2回目以降は既定でスキップする。叩き直したいときだけ true
       FORCE: ${{ github.event.client_payload.force || github.event.inputs.force }}
       THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
-      # 仕事ごとに API キーを分けて、費用を見分ける（2026-10-10 代表）。ANTHROPIC_API_KEY_REVIEW が無ければ共通のキー
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_REVIEW || secrets.ANTHROPIC_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
       REVIEW_HOLD_DAYS: ${{ vars.REVIEW_HOLD_DAYS }}
     steps:
