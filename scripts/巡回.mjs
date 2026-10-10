@@ -405,7 +405,7 @@ async function インスタを読む(先, 境目, 上限, 捨てる語 = []) {
   const 名前 = 先.名前 ?? `Instagram @${先.ユーザー名}`;
   if (!id || !鍵) return { 名前, items: [], error: 'IG_USER_ID / IG_ACCESS_TOKEN が未設定（Secrets）' };
   const 項目 = `business_discovery.username(${先.ユーザー名}){username,name,media.limit(${先['最大件数'] ?? 12}){caption,permalink,timestamp,media_type}}`;
-  const url = `https://graph.facebook.com/v21.0/${encodeURIComponent(id)}?fields=${encodeURIComponent(項目)}&access_token=${encodeURIComponent(鍵)}`;
+  const url = `https://graph.facebook.com/v26.0/${encodeURIComponent(id)}?fields=${encodeURIComponent(項目)}&access_token=${encodeURIComponent(鍵)}`;
   let 応答;
   try {
     const res = await fetch(url, { signal: AbortSignal.timeout(待ち時間) });
