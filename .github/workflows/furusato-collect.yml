@@ -4,6 +4,7 @@ name: ふるさと納税の返礼品を集める
 # 県の一覧・切り口ごとのリンク（neta/ふるさと納税_リンク.jsonl・切り口リンク.jsonl）も作る。
 # 福井版 scripts/地域の写し.py が、ふるさと納税を集める県のリポジトリにだけ置く。投稿はしない。
 # 毎週月曜 9:30 JST（= 日曜 0:30 UTC）。需要は秋から冬に伸びる。
+# 2026-10-10 リポジトリ名の変更（odekake-ishikawa → ishikawa-odekake）のあと schedule が止まったため、このファイルを更新して登録し直す
 on:
   # repository_dispatch では client_payload.dry_run: true で下見だけできる。
   # （PAT が workflow_dispatch を通せないため。下見の結果は注記として出す）

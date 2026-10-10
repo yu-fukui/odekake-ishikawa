@@ -3,6 +3,7 @@ name: アフィリエイト投稿の検証
 # 代表 10/9「アフィリエイト投稿を分析して、PDCAを回すサイクルを構築して」。
 # 楽天トラベル・ふるさと納税の投稿の閲覧とリンクのクリックを集め、insights/アフィリの成績.md と
 # insights/アフィリの学び.json（翌日ぶんの compose が読む）を書く。毎日 19:30 JST（20:00 の compose より前）。
+# 2026-10-10 リポジトリ名の変更（odekake-ishikawa → ishikawa-odekake）のあと schedule が止まったため、このファイルを更新して登録し直す
 on:
   schedule:
     - cron: "30 10 * * *"

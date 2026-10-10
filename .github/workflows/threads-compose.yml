@@ -2,6 +2,7 @@ name: Threads 翌日ぶんを作成
 
 # 運用ボードとネタ帳を材料に、翌日ぶんの投稿 10 本を作ってキューに追加する。
 # 外部 cron から毎日 20:00 (JST) に threads-compose で起動する想定。
+# 2026-10-10 リポジトリ名の変更（odekake-ishikawa → ishikawa-odekake）のあと schedule が止まったため、このファイルを更新して登録し直す
 on:
   repository_dispatch:
     types: [threads-compose]

@@ -3,6 +3,7 @@ name: 宿リストを作る
 # 楽天トラベルで県の宿を集め、neta/宿.jsonl を作る（どこを探すかは neta/設定.json の「宿の集めかた」）。
 # 福井版 fukui-fukui/threads の scripts/地域の写し.py が、宿を集める県のリポジトリにだけ置く。
 # 投稿はしない。毎週月曜 9:00 JST（= 日曜 0:00 UTC）と、手で回したとき。
+# 2026-10-10 リポジトリ名の変更（odekake-ishikawa → ishikawa-odekake）のあと schedule が止まったため、このファイルを更新して登録し直す
 on:
   repository_dispatch:
     types: [hotel-collect]

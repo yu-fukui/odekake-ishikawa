@@ -4,6 +4,7 @@ name: Threads 日次レビュー
 # 昨日までの投稿の数字を取り、何が効いたかを判定して、翌日の生成指示（insights/learnings.md）を 1 つだけ更新する。
 # 毎日 19:15 JST ごろ（20:00 の compose より前）に動かす。
 # 外部 cron（cron-job.org）から threads-review で叩くのを本線にし、GitHub の schedule は保険。
+# 2026-10-10 リポジトリ名の変更（odekake-ishikawa → ishikawa-odekake）のあと schedule が止まったため、このファイルを更新して登録し直す
 on:
   repository_dispatch:
     types: [threads-review]

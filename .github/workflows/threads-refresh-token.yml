@@ -3,6 +3,7 @@ name: Threads トークン更新
 # 長期アクセストークンの有効期限は 60 日。週 1 回更新して切らさないようにする。
 # 更新後のトークンを Secret へ書き戻すには、Secrets への書き込み権限を持つ
 # Personal Access Token を Secret GH_PAT に登録しておく必要がある。
+# 2026-10-10 リポジトリ名の変更（odekake-ishikawa → ishikawa-odekake）のあと schedule が止まったため、このファイルを更新して登録し直す
 on:
   # 毎週月曜 12:00 JST
   schedule:
