@@ -66,7 +66,8 @@ jobs:
       - name: 集めて ネタ帳.md に追記する
         id: collect
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # 仕事ごとに API キーを分けて、費用を見分ける（2026-10-10 代表）。ANTHROPIC_API_KEY_COLLECT が無ければ共通のキー
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_COLLECT || secrets.ANTHROPIC_API_KEY }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
           CRAWL_ONLY: ${{ (inputs.crawl_only || github.event.client_payload.crawl_only) && '1' || '' }}
           # 指定した Instagram アカウントの新しい投稿を読む（無ければ読まない。2026-10-10）
