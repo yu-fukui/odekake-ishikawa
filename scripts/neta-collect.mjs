@@ -412,10 +412,10 @@ async function claudeに聞く(prompt) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 設定.モデル ?? 'claude-sonnet-5',
+        model: 設定.モデル ?? 'claude-sonnet-5-5',
         // 候補が多い日は 8000 では返しの JSON の途中で切れた（2026-10-08 石川版、候補130件）
         max_tokens: 16000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 設定.検索回数 ?? 8 }],
+        tools: [{ type: 'web_search_20260209', name: 'web_search', max_uses: 設定.検索回数 ?? 8 }],
         messages
       })
     });
@@ -433,13 +433,13 @@ async function claudeに聞く(prompt) {
     messages.push({ role: 'assistant', content: data.content });
   }
   // 実際にいくら使ったかを毎回残す。見積りでなく実測で判断するため（続き呼び出しぶんも合算）。
-  // Sonnet 5: 入力 $2/Mtok、出力 $10/Mtok、Web検索 $10/1000回（2026-09 時点）
+  // Sonnet 5.5: 入力 $2/Mtok、出力 $10/Mtok、Web検索 $10/1000回（2026-09 時点）
   const 概算 = (入力 / 1e6) * 2 + (出力t / 1e6) * 10 + 検索した * 0.01;
   console.log(
     `使った分: 入力 ${入力} tok ／ 出力 ${出力t} tok ／ Web検索 ${検索した} 回` +
       `（上限 ${設定.検索回数 ?? 8}）／ 概算 $${概算.toFixed(4)}`
   );
-  使用量を記録する(設定.モデル ?? 'claude-sonnet-5', 入力, 出力t, 検索した);
+  使用量を記録する(設定.モデル ?? 'claude-sonnet-5-5', 入力, 出力t, 検索した);
   if (data?.stop_reason === 'max_tokens') {
     console.log('::warning::max_tokens で切れました。設定.検索回数 を減らすか max_tokens を上げてください');
   }
