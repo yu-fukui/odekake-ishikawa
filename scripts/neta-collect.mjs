@@ -97,7 +97,7 @@ if (existsSync(巡回先パス)) {
   const 渡す上限 = 巡回先['AIに渡す最大件数'] ?? 80;
   const 残り = 順に取る(新しい, 渡す上限);
   候補件数 = 残り.length;
-  インスタを渡した = 残り.filter((c) => String(c.区分 ?? '').startsWith('インスタ')).map((c) => c.url);
+  インスタを渡した = 残り.filter((c) => String(c.区分 ?? '').startsWith('インスタ'));
   console.log(`候補: ${候補.length}件 → ネタ帳に無いもの ${新しい.length}件 → AI に渡す ${残り.length}件（上限 ${渡す上限}）`);
 
   候補一覧 = 残り.length
@@ -292,10 +292,18 @@ if (!取れた || !Array.isArray(取れた.items)) {
 if (!書かない && インスタを渡した.length) {
   const 前 = existsSync(インスタ既読パス) ? JSON.parse(readFileSync(インスタ既読パス, 'utf8')) : [];
   // 古いものから捨てて 2000 件まで（巡回は10日以内しか見ないので、それより古い URL は要らない）
-  const 全部 = [...new Set([...前, ...インスタを渡した])].slice(-2000);
+  const 全部 = [...new Set([...前, ...インスタを渡した.map((c) => c.url)])].slice(-2000);
   mkdirSync('state', { recursive: true });
   writeFileSync(インスタ既読パス, JSON.stringify(全部, null, 0) + '\n', 'utf8');
   console.log(`インスタ: ${インスタを渡した.length}件を読んだものとして覚えました（${インスタ既読パス}）`);
+}
+// 今回初めて見た投稿の一覧（無ければ空）。Claude の定期のお知らせ（引用の候補）がここを読む（2026-10-10 代表）
+if (!書かない) {
+  mkdirSync('state', { recursive: true });
+  writeFileSync('state/インスタ新着.json', JSON.stringify({
+    集めた日: 今日,
+    投稿: インスタを渡した.map((c) => ({ アカウント: c.名前, 日付: c.日付, 本文: c.タイトル, url: c.url })),
+  }, null, 1) + '\n', 'utf8');
 }
 
 // ==================================================================
