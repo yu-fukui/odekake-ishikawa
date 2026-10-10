@@ -124,3 +124,9 @@ jobs:
         continue-on-error: true
         run: |
           ./scripts/commit_file.sh state/usage.jsonl "chore(usage): AI の使用量を記録"
+
+      - name: 読んだインスタの投稿の記録をコミットする
+        if: ${{ always() }}
+        continue-on-error: true
+        run: |
+          if [ -e "state/インスタ既読.json" ]; then ./scripts/commit_file.sh "state/インスタ既読.json" "chore(insta): 読んだ投稿を記録"; fi

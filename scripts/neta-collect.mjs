@@ -71,6 +71,8 @@ const 既存 = new Set(
 // ==================================================================
 const 巡回先パス = 'neta/巡回先.json';
 let 候補一覧 = '（巡回先の設定がありません）';
+const インスタ既読パス = 'state/インスタ既読.json';
+let インスタを渡した = [];
 let 候補件数 = 0;
 
 if (existsSync(巡回先パス)) {
@@ -79,16 +81,23 @@ if (existsSync(巡回先パス)) {
   console.log(`巡回: ${取れた.length}件の巡回先から取得、${取れなかった.length}件が失敗、見出しで${捨てた ?? 0}件を除外`);
   for (const s of 取れなかった) console.log(`  取れず: ${s}`);
 
+  // Instagram の投稿は、一度 AI に渡したものを覚えておき、次からは渡さない（2026-10-10 代表「重複で読まないように」）。
+  // インスタの投稿の URL は出典にしない決まりなので、ネタ帳の URL では重複を見分けられないため。
+  const インスタ既読 = new Set(existsSync(インスタ既読パス) ? JSON.parse(readFileSync(インスタ既読パス, 'utf8')) : []);
+  const 初めて = 候補.filter((c) => !String(c.区分 ?? '').startsWith('インスタ') || !インスタ既読.has(c.url));
+  if (初めて.length < 候補.length) console.log(`インスタ: 前に読んだ ${候補.length - 初めて.length}件を外しました`);
+
   // すでにネタ帳に URL がある候補は外す
   const 使い済みURL = new Set([...ネタ帳.matchAll(/https?:\/\/[^\s)）]+/g)].map((m) => m[0].replace(/[.,、。]+$/, '')));
   // 出典を一覧ページに固定した先（ふーぽ新店速報など）は、全部が同じURLになる。
   // URL で落とすと2回目以降まるごと消えるので、対象から外す。重複は行の文面で弾く。
-  const 新しい = 候補.filter((c) => c.出典固定 || !使い済みURL.has(c.url));
+  const 新しい = 初めて.filter((c) => c.出典固定 || !使い済みURL.has(c.url));
   // 多すぎると AI の返しが途中で切れる（2026-10-08 石川版で130件）。上限を決めて、
   // 巡回先ごとに1件ずつ順に取って（新しい順）、どの巡回先も落とさないようにする。
   const 渡す上限 = 巡回先['AIに渡す最大件数'] ?? 80;
   const 残り = 順に取る(新しい, 渡す上限);
   候補件数 = 残り.length;
+  インスタを渡した = 残り.filter((c) => String(c.区分 ?? '').startsWith('インスタ')).map((c) => c.url);
   console.log(`候補: ${候補.length}件 → ネタ帳に無いもの ${新しい.length}件 → AI に渡す ${残り.length}件（上限 ${渡す上限}）`);
 
   候補一覧 = 残り.length
@@ -277,6 +286,16 @@ if (!取れた || !Array.isArray(取れた.items)) {
   console.log(本文.slice(0, 1500) || '（空）');
   出力('added', '0');
   process.exit(1);
+}
+
+// AI に渡して返事が取れたインスタの投稿を、読んだものとして覚える（ネタ帳に入れたかどうかに関わらず）
+if (!書かない && インスタを渡した.length) {
+  const 前 = existsSync(インスタ既読パス) ? JSON.parse(readFileSync(インスタ既読パス, 'utf8')) : [];
+  // 古いものから捨てて 2000 件まで（巡回は10日以内しか見ないので、それより古い URL は要らない）
+  const 全部 = [...new Set([...前, ...インスタを渡した])].slice(-2000);
+  mkdirSync('state', { recursive: true });
+  writeFileSync(インスタ既読パス, JSON.stringify(全部, null, 0) + '\n', 'utf8');
+  console.log(`インスタ: ${インスタを渡した.length}件を読んだものとして覚えました（${インスタ既読パス}）`);
 }
 
 // ==================================================================
