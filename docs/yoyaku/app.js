@@ -45,8 +45,8 @@
     const segment = location.pathname.split("/").filter(Boolean)[0] || "";
     if (owner && segment) return `${owner}/${segment}`;
     if (owner) return `${owner}/${owner}.github.io`;
-    // 独自ドメイン（odekake.fukui-fukui.com/yoyaku/）で開いたとき
-    return "yu-fukui/odekake-ishikawa";
+    // 独自ドメイン（ishikawa-odekake.fukui-fukui.com/yoyaku/）で開いたとき
+    return "yu-fukui/ishikawa-odekake";
   }
 
   function loadSettings() {
