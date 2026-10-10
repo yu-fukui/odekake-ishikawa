@@ -26,7 +26,8 @@ export async function 巡回(巡回先) {
     ...(巡回先.HTML ?? []).map((s) => () =>
       s['拾い方'] === 'リスト' ? リストを読む(s, 捨てる語) : HTMLを読む(s, 捨てる語)
     ),
-    ...(巡回先['よそのネタ帳'] ?? []).map((s) => () => ネタ帳を読む(s, 捨てる語))
+    ...(巡回先['よそのネタ帳'] ?? []).map((s) => () => ネタ帳を読む(s, 捨てる語)),
+    ...(巡回先['インスタ'] ?? []).map((s) => () => インスタを読む(s, 境目, 上限, 捨てる語))
   ];
   // 一度に全部つなぐと、相手側で接続が詰まって落ちる（44本にしたら11本が
   // UND_ERR_CONNECT_TIMEOUT になった）。同時に走らせる数を絞る。
@@ -384,4 +385,56 @@ function ほぐす(s) {
     .replace(/&amp;/g, '&')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+// ------------------------------------------------------------------ インスタ
+
+/**
+ * 指定した Instagram アカウントの新しい投稿を、公式の Graph API（business_discovery）で読む。
+ * 2026-10-10 代表「指定したインスタアカウントの新着投稿内容を取得するbotを作成できますか？」
+ *
+ * - 読めるのはビジネス／クリエイターのアカウントだけ（個人のアカウントは API が返さない）
+ * - こちら側の Instagram（プロアカウント）の ID とアクセスキーが要る：
+ *   Secrets の IG_USER_ID・IG_ACCESS_TOKEN。無ければ読まずに「未設定」とだけ返す
+ * - 画面の読み取り（スクレイピング）はしない（Instagram の利用規約に反するため）
+ * - 返すのは「入口」。情報アカウントの投稿なので、事実は主催者・店の公式で取り直す（neta-collect の決まり）
+ */
+async function インスタを読む(先, 境目, 上限, 捨てる語 = []) {
+  const id = (process.env.IG_USER_ID ?? '').trim();
+  const 鍵 = (process.env.IG_ACCESS_TOKEN ?? '').trim();
+  const 名前 = 先.名前 ?? `Instagram @${先.ユーザー名}`;
+  if (!id || !鍵) return { 名前, items: [], error: 'IG_USER_ID / IG_ACCESS_TOKEN が未設定（Secrets）' };
+  const 項目 = `business_discovery.username(${先.ユーザー名}){username,name,media.limit(${先['最大件数'] ?? 12}){caption,permalink,timestamp,media_type}}`;
+  const url = `https://graph.facebook.com/v21.0/${encodeURIComponent(id)}?fields=${encodeURIComponent(項目)}&access_token=${encodeURIComponent(鍵)}`;
+  let 応答;
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(待ち時間) });
+    応答 = await res.json();
+    if (!res.ok || 応答.error) {
+      const e = 応答.error ?? {};
+      // 190 はアクセスキーの期限切れ・失効。鍵を出し直してもらう
+      const わけ = e.code === 190 ? 'アクセスキーの期限切れ（IG_ACCESS_TOKEN を出し直す）' : `${e.code ?? res.status} ${String(e.message ?? '').slice(0, 100)}`;
+      return { 名前, items: [], error: わけ };
+    }
+  } catch (e) {
+    return { 名前, items: [], error: String(e.message ?? e).slice(0, 160) };
+  }
+  const items = [];
+  let 捨てた = 0;
+  for (const m of 応答.business_discovery?.media?.data ?? []) {
+    const 本文 = String(m.caption ?? '').replace(/#\S+/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!本文 || !m.permalink) continue;
+    const タイトル = 本文.slice(0, 120);
+    if (捨てるか(タイトル, 捨てる語)) { 捨てた += 1; continue; }
+    const 日付 = m.timestamp ? new Date(m.timestamp) : null;
+    if (日付 && 日付.getTime() < 境目) continue;
+    items.push({
+      名前,
+      区分: 先.区分 ?? 'インスタ（入口）',
+      タイトル,
+      url: m.permalink,
+      日付: 日付 ? 日付.toISOString().slice(0, 10) : ''
+    });
+  }
+  return { 名前, items: items.slice(0, 上限), 捨てた };
 }
